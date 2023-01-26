@@ -8,6 +8,7 @@ import "./index.css";
 import { ErrorBoundary } from "./pages/errorPages/ErrorBoundary";
 import store from "./store/store";
 import { Provider } from "react-redux";
+import { registerServiceWorker } from "./services/serviceWorkerUtils";
 
 delete window.__PRELOADED_STATE__;
 
@@ -25,3 +26,5 @@ const app = (
 );
 
 ReactDOM.hydrateRoot(rootElement, app);
+
+registerServiceWorker();

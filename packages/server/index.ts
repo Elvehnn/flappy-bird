@@ -39,6 +39,11 @@ const startServer = async () => {
         app.use("/assets", express.static(path.resolve(distPath, "assets")));
     }
 
+    app.use(
+        "/serviceWorker.js",
+        express.static(path.resolve(distPath, "serviceWorker.js"))
+    );
+
     app.use("*", async (req, res, next) => {
         const url = req.originalUrl;
 

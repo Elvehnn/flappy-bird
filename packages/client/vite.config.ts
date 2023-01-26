@@ -16,4 +16,19 @@ export default defineConfig({
     resolve: {
         alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
     },
+    build: {
+        rollupOptions: {
+            input: {
+                app: "./index.html",
+                serviceWorker: "./src/serviceWorker.ts",
+            },
+            output: {
+                entryFileNames: assetInfo => {
+                    return assetInfo.name === "serviceWorker"
+                        ? "[name].js"
+                        : "assets/js/[name]-[hash].js";
+                },
+            },
+        },
+    },
 });
