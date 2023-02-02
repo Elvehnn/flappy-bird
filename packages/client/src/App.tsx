@@ -47,8 +47,7 @@ export const App = () => {
         const storedThemeName =
             typeof window !== "undefined"
                 ? localStorage.getItem("theme")
-                : ThemeNames.Dark;
-
+                : "DARK";
         dispatch(
             themeActions.setTheme(
                 MAP_NAME_TO_THEME[storedThemeName as ThemeNames]
@@ -66,11 +65,11 @@ export const App = () => {
                             path="/game"
                             element={
                                 <Suspense
-                                  fallback={
-                                      <MainLayout>
-                                          <>Загрузка</>
-                                      </MainLayout>
-                                  }>
+                                    fallback={
+                                        <MainLayout>
+                                            <>Загрузка</>
+                                        </MainLayout>
+                                    }>
                                     <GamePage />
                                 </Suspense>
                             }
