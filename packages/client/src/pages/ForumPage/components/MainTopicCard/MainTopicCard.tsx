@@ -1,40 +1,52 @@
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import { Button, Form, Input } from "antd";
 import classNames from "classnames";
 
 import "./MainTopicCard.scss";
+import { addNewTheme, getThemes } from "@/services/forum";
+import { forumActions } from "@/store/slices/forum/forumSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 interface MainTopicCardProps {
     title: string;
-    messageCount: number;
     themesCount: number;
+    openTheme: MouseEventHandler<HTMLDivElement>;
+    mainThemeId: number;
 }
 
-const MainTopicCard = ({title, messageCount, themesCount}: MainTopicCardProps) => {
+interface FormValues {
+    title: string;
+    description: string;
+}
+
+const MainTopicCard = ({title, themesCount, openTheme, mainThemeId}: MainTopicCardProps) => {
     const [isVisibleCreateTopic, setIsVisibleCreateTopic] = useState(false);
+    const dispatch = useAppDispatch();
 
     const createTopicClasses = classNames("create-topic", {
         ["create-topic_open"]: isVisibleCreateTopic,
     })
 
-    const onFinish = (values) => {
-        console.log(values)
+    const onFinish = async ({ title, description }: FormValues) => {
+        try {
+            await addNewTheme(mainThemeId, title, description);
+            setIsVisibleCreateTopic(false);
+            getThemes().then(themes => dispatch(forumActions.setThemes(themes)));
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
-        <div className="root">
-            <div className="topic">
-                <div className="topic__name">{title}</div>
-                <div className="topic__info">
+        <div className="main-topic-card">
+            <div className="main-topic">
+                <div className="main-topic__name" onClick={openTheme}>{title}</div>
+                <div className="main-topic__info">
                     <div className="counter">
                         <div className="counter__title">Темы</div>
                         <div className="counter__number">{themesCount}</div>
                     </div>
-                    <div className="counter">
-                        <div className="counter__title">Сообщения</div>
-                        <div className="counter__number">{messageCount}</div>
-                    </div>
-                    <Button className="topic__button" danger={isVisibleCreateTopic} onClick={() => setIsVisibleCreateTopic(prev => !prev)}>
+                    <Button className="main-topic__button" danger={isVisibleCreateTopic} onClick={() => setIsVisibleCreateTopic(prev => !prev)}>
                         {isVisibleCreateTopic ? "Отменить" : "Создать тему"}
                     </Button>
                 </div>

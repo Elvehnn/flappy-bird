@@ -1,0 +1,17 @@
+.send-comment {
+  background-color: #4b8188;
+  padding: 15px 15px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.send-comment__input {
+  width: calc(100% - 140px);
+}
+
+.send-comment__button {
+  margin-left: 15px;
+  width: 125px;
+}

@@ -43,6 +43,9 @@ export class Forum extends Model<Forum> {
     @Column(DataType.INTEGER)
     theme_id: number | undefined;
 
+    @Column(DataType.INTEGER)
+    main_theme_id: number | undefined;
+
     @AllowNull(false)
     @Column(DataType.STRING)
     title: string | undefined;
