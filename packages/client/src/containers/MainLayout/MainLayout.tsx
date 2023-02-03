@@ -7,6 +7,7 @@ import "./MainPage.scss";
 import { useAppSelector } from "@/store/hooks";
 import { userSelectors } from "@/store/slices/user/userSlice";
 import Title from "antd/lib/typography/Title";
+import { COLORED_LOGO } from "@/constants/imagesPaths";
 
 const { Content, Footer, Header } = Layout;
 
@@ -21,9 +22,10 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
         <Layout className="layout">
             <Header className="layout_header">
                 <img
-                    src={"../../../public/Flappy_Logo.png"}
-                    alt={"logo"}
+                    width={300}
                     className="layout_header_img"
+                    src={COLORED_LOGO}
+                    data-testid="logo"
                 />
             </Header>
 

@@ -1,8 +1,8 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 import { PATH } from "@/constants/apiPaths";
 import { apiErrorHandler } from "./apiErrorHandler";
 
-axios.interceptors.request.use(function (config: AxiosRequestConfig) {
+axios.interceptors.request.use(function (config: InternalAxiosRequestConfig) {
     config.withCredentials = true;
     config.baseURL = PATH.BASE;
     config.timeout = 5000;

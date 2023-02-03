@@ -5,6 +5,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { createServer as createViteServer } from "vite";
 import type { ViteDevServer } from "vite";
+
 dotenv.config();
 
 const isDev = () => process.env.NODE_ENV === "development";
@@ -14,14 +15,14 @@ const startServer = async () => {
     const port = Number(process.env.SERVER_PORT) || 5000;
 
     let vite: ViteDevServer | undefined;
-
-    const distPath = path.dirname(require.resolve("client/dist/index.html"));
-    const srcPath = path.dirname(require.resolve("client"));
-    const ssrClientPath = require.resolve("client/dist-ssr/ssr.cjs");
+    let distPath = "";
+    let srcPath = "";
+    let ssrClientPath = "";
 
     app.use(cors());
 
     if (isDev()) {
+        srcPath = path.dirname(require.resolve("client"));
         vite = await createViteServer({
             server: { middlewareMode: true },
             root: srcPath,
@@ -29,6 +30,9 @@ const startServer = async () => {
         });
 
         app.use(vite.middlewares);
+    } else {
+        distPath = path.dirname(require.resolve("client/dist/index.html"));
+        ssrClientPath = require.resolve("client/dist-ssr/ssr.cjs");
     }
 
     app.get("/api", (_, res) => {
@@ -84,7 +88,6 @@ const startServer = async () => {
             const state = store.getState();
 
             const appHtml = await render(store, req.url);
-
             const stateHtml = `<script>window.__PRELOADED_STATE__=${JSON.stringify(
                 state
             ).replace(/</g, "\\u003c")}</script>`;
@@ -93,7 +96,6 @@ const startServer = async () => {
                 `<!--ssr-insertion-->`,
                 appHtml + stateHtml
             );
-
             res.status(200).set({ "Content-Type": "text/html" }).end(html);
         } catch (error) {
             if (isDev()) {

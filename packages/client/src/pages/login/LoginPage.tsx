@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Image, Typography } from "antd";
+import { Col, Layout, Row, Typography } from "antd";
 import { LoginForm } from "@/components/forms/LoginForm/LoginForm";
 import { COLORED_LOGO } from "@/constants/imagesPaths";
 import "./LoginPage.scss";
@@ -11,7 +11,7 @@ const LoginPage = () => (
                     className="login-form-container"
                     data-testid="form-container">
                     <div className="logo">
-                        <Image
+                        <img
                             width={200}
                             src={COLORED_LOGO}
                             data-testid="logo"
