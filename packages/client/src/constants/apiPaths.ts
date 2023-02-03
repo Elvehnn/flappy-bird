@@ -1,5 +1,3 @@
-export const SERVER_PORT = 5000;
-
 export const PATH = {
     BASE: "https://ya-praktikum.tech/api/v2/",
     WEBSOCKET: "wss://ya-praktikum.tech/ws/",
@@ -9,7 +7,7 @@ export const PATH = {
 export const OAUTH_PATH = {
     BASE: `oauth/yandex`,
     YANDEX_AUTHORIZE: `https://oauth.yandex.ru/authorize?response_type=code`,
-    REDIRECT_URL: `http://localhost:${SERVER_PORT}`,
+    REDIRECT_URL: `http://localhost:${__SERVER_PORT__}`,
     SERVICE_ID: "oauth/yandex/service-id",
 };
 

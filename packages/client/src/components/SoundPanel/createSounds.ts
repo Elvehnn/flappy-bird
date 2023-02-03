@@ -1,9 +1,9 @@
-import { SOUND_FILES } from "@/constants/soundsPaths";
+import * as soundfFiles from "@/assets/sounds";
 import { mapSrcToName } from "./soundHelpers";
 
 export const createSounds = () => {
     const soundElements: Record<string, HTMLAudioElement> = Object.values(
-        SOUND_FILES
+        soundfFiles
     ).reduce((acc, soundFile) => {
         const audioElement = new Audio(soundFile);
         const name = audioElement.src.split("/").pop();

@@ -39,7 +39,7 @@ export const SoundPanel = ({ audioContext }: SoundPanelProps) => {
 
     return (
         <Switch
-            className="switch"
+            className="sound-switch"
             checkedChildren={<SoundOnIcon style={{ color: "#fff" }} />}
             unCheckedChildren={<SoundOffIcon style={{ color: "#fff" }} />}
             onChange={togglePlay}

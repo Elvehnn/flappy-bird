@@ -5,8 +5,6 @@ import * as fs from "fs";
 import * as path from "path";
 import { createServer as createViteServer } from "vite";
 import type { ViteDevServer } from "vite";
-import { sequelize } from "./db";
-import { Forum, ForumComments, Ladder } from "./tables";
 dotenv.config();
 
 const isDev = () => process.env.NODE_ENV === "development";
@@ -16,14 +14,14 @@ const startServer = async () => {
     const port = Number(process.env.SERVER_PORT) || 5000;
 
     let vite: ViteDevServer | undefined;
-    let distPath = "";
-    let srcPath = "";
-    let ssrClientPath = "";
+
+    const distPath = path.dirname(require.resolve("client/dist/index.html"));
+    const srcPath = path.dirname(require.resolve("client"));
+    const ssrClientPath = require.resolve("client/dist-ssr/ssr.cjs");
 
     app.use(cors());
 
     if (isDev()) {
-        srcPath = path.dirname(require.resolve("client"));
         vite = await createViteServer({
             server: { middlewareMode: true },
             root: srcPath,
@@ -31,64 +29,10 @@ const startServer = async () => {
         });
 
         app.use(vite.middlewares);
-    } else {
-        distPath = path.dirname(require.resolve("client/dist/index.html"));
-        ssrClientPath = require.resolve("client/dist-ssr/ssr.cjs");
     }
 
-    app.use(express.json());
-
-    await sequelize.sync();
-
-    //Ладдер хендлеры
-    app.get("/api/v1/ladder", async (_, res) => {
-        const ladder = await Ladder.findAll();
-        res.send(ladder);
-    });
-
-    app.post("/api/v1/ladder", async (req, res) => {
-        const ladder = await Ladder.create(req.body);
-        res.json(ladder.dataValues);
-    });
-    //Форум хендлеры
-    app.get("/api/v1/forum", async (_, res) => {
-        const ladder = await Forum.findAll();
-        res.send(ladder);
-    });
-
-    app.post("/api/v1/forum", async (req, res) => {
-        const forum = await Forum.create(req.body);
-        res.json(forum.dataValues);
-    });
-
-    app.put("/api/v1/forum/:id", async (req, res) => {
-        const [themeCount] = await Forum.update(req.body, {
-            where: { theme_id: req.params.id },
-        });
-        let status = "error";
-        let payload;
-        if (themeCount) {
-            payload = await Forum.findOne({
-                where: { theme_id: req.params.id },
-            });
-            status = "ok";
-        }
-        res.json({ status, payload });
-    });
-    //Комменты форума хендлеры
-    app.get("/api/v1/forum-comments/:id", async (req, res) => {
-        const comments = await ForumComments.findAll({
-            where: { theme_id: req.params.id },
-        });
-        res.send(comments);
-    });
-
-    app.post("/api/v1/forum-comments/:id", async (req, res) => {
-        const comment = await ForumComments.create({
-            theme_id: req.params.id,
-            ...req.body,
-        });
-        res.json(comment);
+    app.get("/api", (_, res) => {
+        res.json("👋 Howdy from the server :)");
     });
 
     if (!isDev()) {
@@ -140,6 +84,7 @@ const startServer = async () => {
             const state = store.getState();
 
             const appHtml = await render(store, req.url);
+
             const stateHtml = `<script>window.__PRELOADED_STATE__=${JSON.stringify(
                 state
             ).replace(/</g, "\\u003c")}</script>`;
@@ -148,6 +93,7 @@ const startServer = async () => {
                 `<!--ssr-insertion-->`,
                 appHtml + stateHtml
             );
+
             res.status(200).set({ "Content-Type": "text/html" }).end(html);
         } catch (error) {
             if (isDev()) {
