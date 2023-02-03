@@ -8,14 +8,21 @@ import { ProfilePage } from "./pages/profile/ProfilePage";
 import { ProfileChangePage } from "./pages/profile-change/ProfileChangePage";
 import "./App.css";
 import { lazy, Suspense, useEffect } from "react";
-import { useAppDispatch } from "./store/hooks";
+import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { getYandexToken } from "./services/oAuthYandex";
 import StartPage from "./pages/StartPage/StartPage";
 import { ROUTE_PATH } from "./constants/routePaths";
+import { ErrorBoundary } from "./pages/errorPages/ErrorBoundary";
+import { ConfigProvider } from "antd";
+import { themeActions, themeSelectors } from "./store/slices/theme/themeSlice";
+import { ThemeNames } from "./store/slices/theme/typings";
+import { MAP_NAME_TO_THEME } from "./constants/appTheme";
+import MainLayout from "@/containers/MainLayout/MainLayout";
 
 export const App = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const { theme } = useAppSelector(themeSelectors.all);
 
     const GamePage = lazy(() =>
         import("./pages/GamePage/GamePage").then(module => ({
@@ -35,30 +42,52 @@ export const App = () => {
         }
     }, []);
 
+    useEffect(() => {
+        const storedThemeName =
+            typeof window !== "undefined"
+                ? localStorage.getItem("theme")
+                : ThemeNames.Dark;
+
+        dispatch(
+            themeActions.setTheme(
+                MAP_NAME_TO_THEME[storedThemeName as ThemeNames]
+            )
+        );
+    }, []);
+
     return (
-        <div className="App">
-            <Routes>
-                <Route path={ROUTE_PATH.START} element={<StartPage />} />
-                <Route
-                    path={ROUTE_PATH.GAME}
-                    element={
-                        <Suspense fallback={<>Загрузка...</>}>
-                            <GamePage />
-                        </Suspense>
-                    }
-                />
-                <Route path={ROUTE_PATH.SIGNIN} element={<LoginPage />} />
-                <Route path={ROUTE_PATH.SIGNUP} element={<SignUpPage />} />
-                <Route path={ROUTE_PATH.FORUM} element={<ForumPage />} />
-                <Route path={ROUTE_PATH.LEADERBOARD} element={<LadderPage />} />
-                <Route path={ROUTE_PATH.PROFILE} element={<ProfilePage />} />
-                <Route
-                    path={ROUTE_PATH.PROFILE_CHANGE}
-                    element={<ProfileChangePage />}
-                />
-                <Route path={ROUTE_PATH.ERROR} element={<div>error404</div>} />
-            </Routes>
-        </div>
+        <ConfigProvider theme={theme.design}>
+            <ErrorBoundary>
+                <div className="App">
+                    <Routes>
+                        <Route path="/" element={<StartPage />} />
+                        <Route
+                            path="/game"
+                            element={
+                                <Suspense
+                                    fallback={
+                                        <MainLayout>
+                                            <>Загрузка</>
+                                        </MainLayout>
+                                    }>
+                                    <GamePage />
+                                </Suspense>
+                            }
+                        />
+                        <Route path="/sign-in" element={<LoginPage />} />
+                        <Route path="/sign-up" element={<SignUpPage />} />
+                        <Route path="/forum" element={<ForumPage />} />
+                        <Route path="/ladder" element={<LadderPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route
+                            path="/profile-change"
+                            element={<ProfileChangePage />}
+                        />
+                        <Route path="/*" element={<div>error404</div>} />
+                    </Routes>
+                </div>
+            </ErrorBoundary>
+        </ConfigProvider>
     );
 };
 
