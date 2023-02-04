@@ -1,11 +1,8 @@
+// @ts-expect-error Property '__WB_MANIFEST' does not exist on type 'ServiceWorkerGlobalScope'.
+const fileList = self.__FB_CACHE_URLS__ || ["/", "/index.html"];
+
 const CACHE_NAME = "flappy-bird-cache-1";
-const URLS = [
-    "/",
-    "/index.html",
-    "/assets/images/Flappy_Logo.png",
-    "/favicon.ico",
-    "/offline.html",
-];
+
 const CACHE_CONTENT_TYPES = [
     "document",
     "script",
@@ -18,34 +15,27 @@ const CACHE_CONTENT_TYPES = [
 ];
 
 self.addEventListener("install", (event: ExtendableEvent) => {
-    console.log("install SW");
-
     event.waitUntil(
         caches
             .open(CACHE_NAME)
-            .then(cache => cache.addAll(URLS))
+            .then(cache => cache.addAll(fileList))
             .then(() => {
                 self.skipWaiting();
-                console.log("skipped waiting");
             })
     );
 });
 
 self.addEventListener("activate", (event: ExtendableEvent) => {
     event.waitUntil(self.clients.claim());
-    console.log("activate SW");
 });
 
 const getCachedData = async (request: Request) => {
-    console.log(request);
-    console.log("пошел за кешом");
     const casheResponse = await caches.match(request);
 
     return casheResponse || updateCache(request);
 };
 
 const updateCache = async (request: Request) => {
-    console.log("кеша не нашел, пошел в тырнет");
     const cache = await caches.open(CACHE_NAME);
 
     try {
@@ -55,7 +45,6 @@ const updateCache = async (request: Request) => {
 
         return response;
     } catch (error) {
-        console.log("ни шиша не нашел, покажу, что есть");
         return await caches.match("/offline.html");
     }
 };
@@ -68,8 +57,6 @@ self.addEventListener("fetch", async event => {
     if (!event.request.url.match(/^http/)) {
         return;
     }
-
-    console.log(event.request);
 
     if (event.request.url.match("^.*/sounds/.*$")) {
         return;

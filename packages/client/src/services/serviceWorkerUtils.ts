@@ -1,4 +1,8 @@
+import { CACHE_URLS } from "@/constants/cacheUrls";
+
 export const registerServiceWorker = () => {
+    self.__FB_CACHE_URLS__ = self.__FB_CACHE_URLS__ ?? CACHE_URLS;
+
     if ("serviceWorker" in navigator) {
         navigator.serviceWorker
             .register("./serviceWorker.js")
