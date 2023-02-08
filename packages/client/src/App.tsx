@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import LadderPage from "./pages/LadderPage/LadderPage";
 import LoginPage from "./pages/login/LoginPage";
 import { SignUpPage } from "./pages/signUp/SignUpPage";
@@ -19,9 +19,11 @@ import { MAP_NAME_TO_THEME } from "./constants/appTheme";
 import MainLayout from "@/containers/MainLayout/MainLayout";
 import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
 import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
+import { userActions } from "./store/slices/user/userSlice";
+import { getUserFromStorage } from "./utils/getUserFromStorage";
+import { getUserPreferences } from "./services/appTheme";
 
 export const App = () => {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { theme } = useAppSelector(themeSelectors.all);
 
@@ -38,21 +40,29 @@ export const App = () => {
             );
 
             if (code) {
-                getYandexToken(code, navigate, dispatch);
+                getYandexToken(code, dispatch);
             }
         }
     }, []);
 
     useEffect(() => {
-        const storedThemeName =
-            typeof window !== "undefined"
-                ? localStorage.getItem("theme")
-                : "DARK";
-        dispatch(
-            themeActions.setTheme(
-                MAP_NAME_TO_THEME[storedThemeName as ThemeNames]
-            )
-        );
+        const user = getUserFromStorage();
+
+        if (user) {
+            dispatch(userActions.setUser(user));
+
+            getUserPreferences(user.id)
+                .then(preferences => {
+                    if (preferences) {
+                        dispatch(
+                            themeActions.setTheme(
+                                MAP_NAME_TO_THEME[preferences as ThemeNames]
+                            )
+                        );
+                    }
+                })
+                .catch(error => console.log(error));
+        }
     }, []);
 
     return (
@@ -77,8 +87,14 @@ export const App = () => {
                         <Route path="/sign-in" element={<LoginPage />} />
                         <Route path="/sign-up" element={<SignUpPage />} />
                         <Route path="/forum" element={<ForumPage />} />
-                        <Route path="/forum/:mainThemeId" element={<MainThemePage />} />
-                        <Route path="/forum/:mainThemeId/:themeId" element={<ThemePage />} />
+                        <Route
+                            path="/forum/:mainThemeId"
+                            element={<MainThemePage />}
+                        />
+                        <Route
+                            path="/forum/:mainThemeId/:themeId"
+                            element={<ThemePage />}
+                        />
                         <Route path="/ladder" element={<LadderPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route

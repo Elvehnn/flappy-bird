@@ -9,6 +9,10 @@ import { getUserInfo, signin } from "@/services/authorization";
 import "./LoginForm.scss";
 import { LOGIN_FORM_VALIDATION_SCHEMA } from "./loginFormValidationSchema";
 import { signinWithYandex } from "@/services/oAuthYandex";
+import { themeActions } from "@/store/slices/theme/themeSlice";
+import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
+import { ThemeNames } from "@/store/slices/theme/typings";
+import { getUserPreferences } from "@/services/appTheme";
 
 export type LoginFormValuesType = {
     login: string;
@@ -33,6 +37,21 @@ export const LoginForm = () => {
             if (userFormServer) {
                 localStorage.setItem("user", JSON.stringify(userFormServer));
                 dispatch(userActions.setUser(userFormServer));
+
+                const preferences = (await getUserPreferences(
+                    userFormServer.id
+                )) as Nullable<ThemeNames>;
+
+                if (preferences) {
+                    dispatch(
+                        themeActions.setTheme(MAP_NAME_TO_THEME[preferences])
+                    );
+
+                    localStorage.setItem(
+                        `${userFormServer.id}_theme`,
+                        preferences
+                    );
+                }
 
                 navigate("/");
             }

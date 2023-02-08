@@ -3,6 +3,11 @@ export type ResponseStatus = {
     status: number;
 };
 
+export type APIError = {
+    reason: string;
+    status: string;
+};
+
 export interface YandexServiceIdResponse extends Response {
     data: { service_id: string };
 }
@@ -68,17 +73,17 @@ export interface LeaderBoardRequestData {
 }
 
 export interface ForumTheme {
-    theme_id: number,
-    main_theme_id: number,
-    title: string,
-    description: string,
-    created: string
+    theme_id: number;
+    main_theme_id: number;
+    title: string;
+    description: string;
+    created: string;
 }
 
 export interface ForumComment {
-    comment_id: number,
-    theme_id: number,
-    body: string,
-    created: string,
-    created_by: string
+    comment_id: number;
+    theme_id: number;
+    body: string;
+    created: string;
+    created_by: string;
 }

@@ -6,11 +6,14 @@ import "./ThemeSwitcher.scss";
 import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
 import LightThemeIcon from "../customIcons/LightThemeIcon";
 import DarkThemeIcon from "../customIcons/DarkThemeIcon";
+import { userSelectors } from "@/store/slices/user/userSlice";
+import { addUserPreferences } from "@/services/appTheme";
 
 export const ThemeSwitcher = () => {
     const dispatch = useAppDispatch();
     const { theme } = useAppSelector(themeSelectors.all);
     const { name, design } = theme;
+    const { user } = useAppSelector(userSelectors.all);
 
     const isThemeDark = name === "DARK";
 
@@ -18,7 +21,11 @@ export const ThemeSwitcher = () => {
         e.stopPropagation();
 
         const newTheme = checked ? "DARK" : "LIGHT";
-        localStorage.setItem("theme", newTheme);
+
+        if (user) {
+            localStorage.setItem(`${user.id}_theme`, newTheme);
+            addUserPreferences(user.id, newTheme);
+        }
 
         dispatch(themeActions.setTheme(MAP_NAME_TO_THEME[newTheme]));
     };

@@ -30,5 +30,7 @@ export const ENDPOINTS = {
     FORUM: {
         THEMES: "api/v1/forum",
         COMMENTS: "api/v1/forum-comments",
-    }
+    },
+
+    USER_PREFERENCES: "api/v1/user-preferences",
 };
