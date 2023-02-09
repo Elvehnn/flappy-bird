@@ -1,14 +1,14 @@
 import { getClientIdRequest } from "@/api/Auth";
-import { UserFromServer, YandexServiceIdResponse } from "@/api/typesApi";
+import { YandexServiceIdResponse } from "@/api/typesApi";
 import axios from "axios";
 import { getUserInfo } from "./authorization";
 import { apiErrorHandler } from "@/api/apiErrorHandler";
 import { userActions } from "@/store/slices/user/userSlice";
-import { AnyAction, Dispatch, ThunkDispatch } from "@reduxjs/toolkit";
 import { OAUTH_PATH } from "@/constants/apiPaths";
 import { themeActions } from "@/store/slices/theme/themeSlice";
 import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
 import { getUserPreferences } from "./appTheme";
+import { AppDispatch } from "@/store/store";
 
 export const signinWithYandex = async () => {
     try {
@@ -33,19 +33,7 @@ export const signinWithYandex = async () => {
     }
 };
 
-export const getYandexToken = async (
-    code: string,
-    dispatch: ThunkDispatch<
-        {
-            user: {
-                user: Nullable<UserFromServer>;
-            };
-        },
-        undefined,
-        AnyAction
-    > &
-        Dispatch<AnyAction>
-) => {
+export const getYandexToken = async (code: string, dispatch: AppDispatch) => {
     try {
         const response = await axios.post(OAUTH_PATH.BASE, {
             code: code,

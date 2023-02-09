@@ -3,6 +3,7 @@ import "./SoundPanel.scss";
 import SoundOnIcon from "@/components/customIcons/SoundOnIcon";
 import SoundOffIcon from "@/components/customIcons/SoundOffIcon";
 import { SwitchChangeEventHandler } from "antd/lib/switch";
+import { getStorageValue } from "@/utils/getStorageValue";
 
 export type SoundPanelProps = {
     audioContext: AudioContext;
@@ -13,9 +14,7 @@ export const SoundPanel = ({ audioContext }: SoundPanelProps) => {
     let isSoundEnabled = false;
 
     try {
-        isSoundEnabled = JSON.parse(
-            localStorage.getItem("soundIsEnabled") || ""
-        );
+        isSoundEnabled = getStorageValue("soundIsEnabled", false);
     } catch (error) {
         isSoundEnabled = false;
     }
