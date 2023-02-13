@@ -40,7 +40,7 @@ const startServer = async () => {
 
     app.use(express.json());
 
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
 
     //Ладдер хендлеры
     app.get("/api/v1/ladder", async (_, res) => {

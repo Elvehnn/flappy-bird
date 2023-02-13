@@ -1,4 +1,5 @@
 export const SERVER_PORT = 5000;
+export const CLIENT_PORT = 3000;
 
 export const PATH = {
     BASE: "https://ya-praktikum.tech/api/v2/",
@@ -9,7 +10,7 @@ export const PATH = {
 export const OAUTH_PATH = {
     BASE: `oauth/yandex`,
     YANDEX_AUTHORIZE: `https://oauth.yandex.ru/authorize?response_type=code`,
-    REDIRECT_URL: `http://localhost:${SERVER_PORT}`,
+    REDIRECT_URL: `http://localhost:${CLIENT_PORT}`,
     SERVICE_ID: "oauth/yandex/service-id",
 };
 
