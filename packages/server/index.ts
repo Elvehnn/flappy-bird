@@ -40,6 +40,14 @@ const startServer = async () => {
 
     app.use(express.json());
 
+  // app.use((_, res, next) => {
+  //   res.append('Access-Control-Allow-Origin', ['*']);
+  //   res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  //   res.append('Access-Control-Allow-Headers', ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept', 'X-PINGOTHER']);
+  //   res.append('Access-Control-Allow-Credentials', 'true');
+  //   next();
+  // });
+
     await sequelize.sync({ force: true });
 
     //Ладдер хендлеры
@@ -98,6 +106,8 @@ const startServer = async () => {
         const user = await UserPreferences.findOne({
             where: { user_id: req.params.id.substring(1) },
         });
+
+      console.log(user);
 
         if (user && user.app_theme_name) {
             res.status(200).json(user.app_theme_name);

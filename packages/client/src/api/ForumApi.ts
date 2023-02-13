@@ -3,6 +3,15 @@ import { AxiosError } from "axios";
 import axios from "./axiosSetup";
 import { ENDPOINTS } from "@/constants/apiPaths";
 
+const headers  = {
+  "Accept": "application/json",
+  "Access-Control-Allow-Origin": "*",
+  "X-Requested-With": "XMLHttpRequest",
+  "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+}
+
+
 export const getAllThemes = async () =>
     await axios.get<ForumTheme[]>(
         `http://localhost:5000/${ENDPOINTS.FORUM.THEMES}`

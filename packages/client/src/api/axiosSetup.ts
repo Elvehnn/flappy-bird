@@ -3,7 +3,7 @@ import { PATH } from "@/constants/apiPaths";
 import { apiErrorHandler } from "./apiErrorHandler";
 // @ts-ignore
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
-    config.withCredentials = true;
+    config.withCredentials = false;
     config.baseURL = PATH.BASE;
     config.timeout = 5000;
 

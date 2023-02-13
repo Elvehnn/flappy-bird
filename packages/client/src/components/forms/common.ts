@@ -34,7 +34,7 @@ export const validationSchema = {
     password: Yup.string()
         .required(NOT_EMPTY_TEXT)
         .min(8, "Field must contain 8 symbols a least")
-        .max(14, "Field must contain less then 14 symbols")
+        .max(30, "Field must contain less then 30 symbols")
         .matches(ONE_CAPITAL_LETTER, ONE_CAPITAL_LETTER_TEXT)
         .matches(ONE_DIGIT, ONE_DIGIT_TEXT),
     email: Yup.string()
