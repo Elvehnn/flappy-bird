@@ -1,27 +1,25 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import LadderPage from "./pages/LadderPage/LadderPage";
-import LoginPage from "./pages/login/LoginPage";
-import { SignUpPage } from "./pages/signUp/SignUpPage";
-import ForumPage from "./pages/ForumPage/ForumPage";
-import { ProfilePage } from "./pages/profile/ProfilePage";
-import { ProfileChangePage } from "./pages/profile-change/ProfileChangePage";
+import { Routes, Route } from "react-router-dom";
+import LadderPage from "@/pages/LadderPage/LadderPage";
+import LoginPage from "@/pages/login/LoginPage";
+import { SignUpPage } from "@/pages/signUp/SignUpPage";
+import ForumPage from "@/pages/ForumPage/ForumPage";
+import { ProfilePage } from "@/pages/profile/ProfilePage";
+import { ProfileChangePage } from "@/pages/profile-change/ProfileChangePage";
 import "./App.css";
 import { lazy, Suspense, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { getYandexToken } from "./services/oAuthYandex";
-import StartPage from "./pages/StartPage/StartPage";
-import { ErrorBoundary } from "./pages/errorPages/ErrorBoundary";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getYandexToken } from "@/services/oAuthYandex";
+import StartPage from "@/pages/StartPage/StartPage";
+import { ErrorBoundary } from "@/pages/errorPages/ErrorBoundary";
 import { ConfigProvider } from "antd";
-import { themeActions, themeSelectors } from "./store/slices/theme/themeSlice";
-import { ThemeNames } from "./store/slices/theme/typings";
-import { MAP_NAME_TO_THEME } from "./constants/appTheme";
+import { themeSelectors } from "@/store/slices/theme/themeSlice";
 import MainLayout from "@/containers/MainLayout/MainLayout";
 import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
 import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
+import { getAuthorizedUser } from "@/utils/getAuthorizedUser";
 
 export const App = () => {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { theme } = useAppSelector(themeSelectors.all);
 
@@ -38,21 +36,13 @@ export const App = () => {
             );
 
             if (code) {
-                getYandexToken(code, navigate, dispatch);
+                getYandexToken(code, dispatch);
             }
         }
     }, []);
 
     useEffect(() => {
-        const storedThemeName =
-            typeof window !== "undefined"
-                ? localStorage.getItem("theme")
-                : "DARK";
-        dispatch(
-            themeActions.setTheme(
-                MAP_NAME_TO_THEME[storedThemeName as ThemeNames]
-            )
-        );
+        getAuthorizedUser(dispatch);
     }, []);
 
     return (
@@ -77,8 +67,14 @@ export const App = () => {
                         <Route path="/sign-in" element={<LoginPage />} />
                         <Route path="/sign-up" element={<SignUpPage />} />
                         <Route path="/forum" element={<ForumPage />} />
-                        <Route path="/forum/:mainThemeId" element={<MainThemePage />} />
-                        <Route path="/forum/:mainThemeId/:themeId" element={<ThemePage />} />
+                        <Route
+                            path="/forum/:mainThemeId"
+                            element={<MainThemePage />}
+                        />
+                        <Route
+                            path="/forum/:mainThemeId/:themeId"
+                            element={<ThemePage />}
+                        />
                         <Route path="/ladder" element={<LadderPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route

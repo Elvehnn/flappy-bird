@@ -10,6 +10,7 @@ import { LoginFormValuesType } from "@/components/forms/LoginForm/LoginForm";
 import { NavigateFunction } from "react-router-dom";
 import { MouseEventHandler } from "react";
 import { apiErrorHandler } from "@/api/apiErrorHandler";
+import { getStorageValue } from "@/utils/getStorageValue";
 
 export const signin = async (values: LoginFormValuesType) => {
     try {
@@ -56,14 +57,16 @@ export const signup = async (
     }
 };
 
-export const signout: MouseEventHandler = async event => {
-    console.log(event, "signout");
-
+export const signout: MouseEventHandler = async () => {
     try {
         const response = await signoutRequest();
 
         if (response.status === 200) {
+            const user = getStorageValue("user", null);
+
             localStorage.removeItem("user");
+            localStorage.removeItem(`${user?.id}_theme`);
+
             window.location.replace(`/sign-in`);
 
             return true;

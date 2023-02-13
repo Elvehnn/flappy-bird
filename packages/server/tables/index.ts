@@ -86,3 +86,24 @@ export class ForumComments extends Model<ForumComments> {
     @Column(DataType.STRING)
     created_by: number | undefined;
 }
+
+export enum ThemeNames {
+    Dark = "DARK",
+    Light = "LIGHT",
+}
+
+@Table({
+    timestamps: false,
+    paranoid: true,
+    tableName: "user_preferences",
+})
+export class UserPreferences extends Model<UserPreferences> {
+    @PrimaryKey
+    @AllowNull(false)
+    @Column(DataType.INTEGER)
+    user_id!: number;
+
+    @AllowNull(false)
+    @Column(DataType.STRING)
+    app_theme_name: ThemeNames | undefined;
+}

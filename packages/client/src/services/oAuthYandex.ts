@@ -1,12 +1,14 @@
 import { getClientIdRequest } from "@/api/Auth";
-import { UserFromServer, YandexServiceIdResponse } from "@/api/typesApi";
+import { YandexServiceIdResponse } from "@/api/typesApi";
 import axios from "axios";
 import { getUserInfo } from "./authorization";
-import { NavigateFunction } from "react-router-dom";
 import { apiErrorHandler } from "@/api/apiErrorHandler";
 import { userActions } from "@/store/slices/user/userSlice";
-import { AnyAction, Dispatch, ThunkDispatch } from "@reduxjs/toolkit";
 import { OAUTH_PATH } from "@/constants/apiPaths";
+import { themeActions } from "@/store/slices/theme/themeSlice";
+import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
+import { getUserPreferences } from "./appTheme";
+import { AppDispatch } from "@/store/store";
 
 export const signinWithYandex = async () => {
     try {
@@ -31,20 +33,7 @@ export const signinWithYandex = async () => {
     }
 };
 
-export const getYandexToken = async (
-    code: string,
-    navigate: NavigateFunction,
-    dispatch: ThunkDispatch<
-        {
-            user: {
-                user: Nullable<UserFromServer>;
-            };
-        },
-        undefined,
-        AnyAction
-    > &
-        Dispatch<AnyAction>
-) => {
+export const getYandexToken = async (code: string, dispatch: AppDispatch) => {
     try {
         const response = await axios.post(OAUTH_PATH.BASE, {
             code: code,
@@ -62,6 +51,13 @@ export const getYandexToken = async (
         if (userFormServer) {
             localStorage.setItem("user", JSON.stringify(userFormServer));
             dispatch(userActions.setUser(userFormServer));
+
+            const preferences = await getUserPreferences(userFormServer.id);
+
+            if (preferences) {
+                dispatch(themeActions.setTheme(MAP_NAME_TO_THEME[preferences]));
+                localStorage.setItem(`${userFormServer.id}_theme`, preferences);
+            }
         }
 
         window.history.pushState({}, "", OAUTH_PATH.REDIRECT_URL);

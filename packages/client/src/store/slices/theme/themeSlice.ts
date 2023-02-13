@@ -4,19 +4,10 @@ import { RootState } from "@/store/store";
 import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
 import { ThemeNames, ThemeObject } from "./typings";
 
-const storedThemeName =
-    typeof window !== "undefined"
-        ? localStorage.getItem("theme")
-        : ThemeNames.Dark;
-
-const initialTheme: ThemeObject =
-    MAP_NAME_TO_THEME[storedThemeName as ThemeNames] ||
-    MAP_NAME_TO_THEME[ThemeNames.Dark];
-
 export const themeSlice = createSlice({
     name: "theme",
     initialState: {
-        theme: initialTheme,
+        theme: MAP_NAME_TO_THEME[ThemeNames.Dark] as ThemeObject,
     },
     reducers: {
         setTheme: (state, { payload }: PayloadAction<ThemeObject>) => {

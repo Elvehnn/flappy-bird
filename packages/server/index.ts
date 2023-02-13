@@ -6,7 +6,7 @@ import * as path from "path";
 import { createServer as createViteServer } from "vite";
 import type { ViteDevServer } from "vite";
 import { sequelize } from "./db";
-import { Forum, ForumComments, Ladder } from "./tables";
+import { Forum, ForumComments, Ladder, UserPreferences } from "./tables";
 dotenv.config();
 
 const isDev = () => process.env.NODE_ENV === "development";
@@ -91,6 +91,48 @@ const startServer = async () => {
             ...req.body,
         });
         res.json(comment);
+    });
+
+    //Темизация приложения (хендлеры)
+    app.get("/api/v1/user-preferences/:id", async (req, res) => {
+        const user = await UserPreferences.findOne({
+            where: { user_id: req.params.id.substring(1) },
+        });
+
+        if (user && user.app_theme_name) {
+            res.status(200).json(user.app_theme_name);
+        }
+    });
+
+    app.post("/api/v1/user-preferences/:id", async (req, res) => {
+        const user = await UserPreferences.findOne({
+            where: { user_id: req.params.id.substring(1) },
+        });
+
+        if (user) {
+            const updatedUser = await UserPreferences.update(req.body, {
+                where: { user_id: req.params.id.substring(1) },
+            });
+
+            let status = 500;
+            let payload;
+
+            if (updatedUser) {
+                payload = (await UserPreferences.findOne({
+                    where: { user_id: req.params.id.substring(1) },
+                })) as UserPreferences | null;
+
+                status = 200;
+            }
+            res.status(status).json(payload);
+        } else {
+            const newUser = await UserPreferences.create({
+                user_id: req.params.id.substring(1),
+                ...req.body,
+            });
+
+            res.status(200).json(newUser);
+        }
     });
 
     if (!isDev()) {

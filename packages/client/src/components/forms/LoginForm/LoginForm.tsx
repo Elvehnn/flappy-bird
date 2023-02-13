@@ -1,7 +1,7 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Button, Input } from "antd";
 import { useFormik } from "formik";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/store/hooks";
 import { userActions } from "@/store/slices/user/userSlice";
@@ -9,6 +9,11 @@ import { getUserInfo, signin } from "@/services/authorization";
 import "./LoginForm.scss";
 import { LOGIN_FORM_VALIDATION_SCHEMA } from "./loginFormValidationSchema";
 import { signinWithYandex } from "@/services/oAuthYandex";
+import { themeActions } from "@/store/slices/theme/themeSlice";
+import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
+import { ThemeNames } from "@/store/slices/theme/typings";
+import { getUserPreferences } from "@/services/appTheme";
+import { useNotification } from "@/hooks/useNorification";
 
 export type LoginFormValuesType = {
     login: string;
@@ -23,9 +28,19 @@ const initialFormValues = {
 export const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const [openNotification, contextHolder] = useNotification();
+    const [isLoading, setIsLoading] = useState(false);
 
     const submitHandler = async (values: LoginFormValuesType) => {
+        setIsLoading(true);
+
         const isLoggedIn = await signin(values);
+
+        openNotification({
+            status: isLoggedIn ? 200 : 401,
+        });
+
+        setIsLoading(false);
 
         if (isLoggedIn) {
             const userFormServer = await getUserInfo();
@@ -33,6 +48,21 @@ export const LoginForm = () => {
             if (userFormServer) {
                 localStorage.setItem("user", JSON.stringify(userFormServer));
                 dispatch(userActions.setUser(userFormServer));
+
+                const preferences = (await getUserPreferences(
+                    userFormServer.id
+                )) as Nullable<ThemeNames>;
+
+                if (preferences) {
+                    dispatch(
+                        themeActions.setTheme(MAP_NAME_TO_THEME[preferences])
+                    );
+
+                    localStorage.setItem(
+                        `${userFormServer.id}_theme`,
+                        preferences
+                    );
+                }
 
                 navigate("/");
             }
@@ -58,7 +88,15 @@ export const LoginForm = () => {
     };
 
     const handleYandexOauth = async () => {
-        await signinWithYandex();
+        setIsLoading(true);
+
+        const isLoggedIn = await signinWithYandex();
+
+        openNotification({
+            status: isLoggedIn ? 200 : 401,
+        });
+
+        setIsLoading(false);
     };
 
     return (
@@ -70,6 +108,7 @@ export const LoginForm = () => {
             autoComplete="off"
             size="large"
             data-testid="login-form">
+            {contextHolder}
             <Form.Item
                 className="login-form__item"
                 label="Login"
@@ -118,7 +157,8 @@ export const LoginForm = () => {
                     type="primary"
                     htmlType="submit"
                     size="large"
-                    data-testid="signin-button">
+                    data-testid="signin-button"
+                    disabled={isLoading}>
                     Sign in
                 </Button>
 
@@ -128,6 +168,7 @@ export const LoginForm = () => {
                     htmlType="button"
                     data-testid="yandex-button"
                     className="yandex-button"
+                    disabled={isLoading}
                     onClick={handleYandexOauth}></Button>
 
                 <NavLink to={"/sign-up"}>

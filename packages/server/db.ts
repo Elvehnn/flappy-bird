@@ -1,7 +1,7 @@
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
-import { Forum, ForumComments, Ladder } from "./tables";
+import { Forum, ForumComments, Ladder, UserPreferences } from "./tables";
 
-const host = process.env.POSTGRES_HOST ?? "localhost";
+const host = process.env.POSTGRES_HOST || "localhost";
 
 const sequelizeOptions: SequelizeOptions = {
     host: host,
@@ -13,4 +13,4 @@ const sequelizeOptions: SequelizeOptions = {
 };
 
 export const sequelize = new Sequelize(sequelizeOptions);
-sequelize.addModels([Ladder, Forum, ForumComments]);
+sequelize.addModels([Ladder, Forum, ForumComments, UserPreferences]);
