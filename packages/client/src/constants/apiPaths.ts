@@ -26,4 +26,9 @@ export const ENDPOINTS = {
         CHANGE_PROFILE_AVATAR: "user/profile/avatar",
         CHANGE_PASSWORD: "user/password",
     },
+
+    FORUM: {
+        THEMES: "api/v1/forum",
+        COMMENTS: "api/v1/forum-comments",
+    }
 };

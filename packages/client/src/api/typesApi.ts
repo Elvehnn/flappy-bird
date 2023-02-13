@@ -66,3 +66,19 @@ export interface LeaderBoardRequestData {
         result: LeaderBoardUser;
     };
 }
+
+export interface ForumTheme {
+    theme_id: number,
+    main_theme_id: number,
+    title: string,
+    description: string,
+    created: string
+}
+
+export interface ForumComment {
+    comment_id: number,
+    theme_id: number,
+    body: string,
+    created: string,
+    created_by: string
+}

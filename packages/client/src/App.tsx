@@ -17,6 +17,8 @@ import { themeActions, themeSelectors } from "./store/slices/theme/themeSlice";
 import { ThemeNames } from "./store/slices/theme/typings";
 import { MAP_NAME_TO_THEME } from "./constants/appTheme";
 import MainLayout from "@/containers/MainLayout/MainLayout";
+import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
+import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
 
 export const App = () => {
     const navigate = useNavigate();
@@ -75,6 +77,8 @@ export const App = () => {
                         <Route path="/sign-in" element={<LoginPage />} />
                         <Route path="/sign-up" element={<SignUpPage />} />
                         <Route path="/forum" element={<ForumPage />} />
+                        <Route path="/forum/:mainThemeId" element={<MainThemePage />} />
+                        <Route path="/forum/:mainThemeId/:themeId" element={<ThemePage />} />
                         <Route path="/ladder" element={<LadderPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route
