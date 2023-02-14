@@ -7,9 +7,9 @@ import { SoundPanel } from "../SoundPanel/SoundPanel";
 import { addScore } from "@/services/leaderboard";
 import { useAppSelector } from "@/store/hooks";
 import { userSelectors } from "@/store/slices/user/userSlice";
-import { DARK_THEME } from "@/constants/appTheme";
 import { themeSelectors } from "@/store/slices/theme/themeSlice";
 import { getStorageValue } from "@/utils/getStorageValue";
+import Title from "antd/lib/typography/Title";
 
 //TODO: положить саунды и аудиоконтекст в стор при загрузке приложения. Иначе долго грузится.
 const { soundElements, audioContext } = createSounds();
@@ -452,15 +452,23 @@ const Game = () => {
                     height={constants.CANVAS_HEIGHT}
                 />
             </div>
+
             <Modal
-                visible={isShowModal}
-                onOk={() => window.location.reload()}
-                cancelButtonProps={{ style: { display: "none" } }}
+                open={isShowModal}
+                onOk={() => {
+                    setIsShowModal(false);
+                    window.location.reload();
+                }}
+                onCancel={() => {
+                    setIsShowModal(false);
+                    window.location.replace("/");
+                }}
                 closable={false}
                 style={{ top: "40vh" }}>
                 <>
                     <div>Ваш результат: {score}</div>
                     <div>Лучший результат: {bestScore}</div>
+                    <Title level={4}>Продолжить?</Title>
                 </>
             </Modal>
         </>
