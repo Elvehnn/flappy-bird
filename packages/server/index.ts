@@ -20,8 +20,6 @@ const startServer = async () => {
     let srcPath = "";
     let ssrClientPath = "";
 
-    app.use(cors());
-
     if (isDev()) {
         srcPath = path.dirname(require.resolve("client"));
         vite = await createViteServer({
@@ -40,15 +38,14 @@ const startServer = async () => {
 
     app.use(express.json());
 
-  // app.use((_, res, next) => {
-  //   res.append('Access-Control-Allow-Origin', ['*']);
-  //   res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  //   res.append('Access-Control-Allow-Headers', ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept', 'X-PINGOTHER']);
-  //   res.append('Access-Control-Allow-Credentials', 'true');
-  //   next();
-  // });
+    app.use(cors());
+    app.use((_, res, next) => {
+        res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.header("Access-Control-Allow-Credentials", "true");
+        next();
+    });
 
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
 
     //Ладдер хендлеры
     app.get("/api/v1/ladder", async (_, res) => {
@@ -104,24 +101,24 @@ const startServer = async () => {
     //Темизация приложения (хендлеры)
     app.get("/api/v1/user-preferences/:id", async (req, res) => {
         const user = await UserPreferences.findOne({
-            where: { user_id: req.params.id.substring(1) },
+            where: { user_id: req.params.id },
         });
-
-      console.log(user);
 
         if (user && user.app_theme_name) {
             res.status(200).json(user.app_theme_name);
+        } else {
+            res.status(500);
         }
     });
 
     app.post("/api/v1/user-preferences/:id", async (req, res) => {
         const user = await UserPreferences.findOne({
-            where: { user_id: req.params.id.substring(1) },
+            where: { user_id: req.params.id },
         });
 
         if (user) {
             const updatedUser = await UserPreferences.update(req.body, {
-                where: { user_id: req.params.id.substring(1) },
+                where: { user_id: req.params.id },
             });
 
             let status = 500;
@@ -129,7 +126,7 @@ const startServer = async () => {
 
             if (updatedUser) {
                 payload = (await UserPreferences.findOne({
-                    where: { user_id: req.params.id.substring(1) },
+                    where: { user_id: req.params.id },
                 })) as UserPreferences | null;
 
                 status = 200;
@@ -137,7 +134,7 @@ const startServer = async () => {
             res.status(status).json(payload);
         } else {
             const newUser = await UserPreferences.create({
-                user_id: req.params.id.substring(1),
+                user_id: req.params.id,
                 ...req.body,
             });
 
