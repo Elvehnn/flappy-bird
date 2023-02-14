@@ -20,6 +20,7 @@ import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
 import { userActions } from "@/store/slices/user/userSlice";
 import { getUserFromStorage } from "@/utils/getUserFromStorage";
 import { getUserPreferences, saveUserPreferences } from "@/services/appTheme";
+import Preloader from "./components/Preloader/Preloader";
 
 export const App = () => {
     const dispatch = useAppDispatch();
@@ -107,7 +108,7 @@ export const App = () => {
         );
     }
 
-    return null;
+    return <Preloader />;
 };
 
 export default App;
