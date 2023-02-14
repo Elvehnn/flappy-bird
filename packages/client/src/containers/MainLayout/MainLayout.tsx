@@ -20,6 +20,7 @@ type MainLayoutProps = {
 const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
     const { user } = useAppSelector(userSelectors.all);
     const { theme } = useAppSelector(themeSelectors.all);
+    const bestScore = window.localStorage.getItem('bestScore') ?? 0
 
     return (
         <Layout
@@ -49,7 +50,7 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
                         <h2>Привет, {user ? user.login : "Юзер"}!</h2>
 
                         {user ? (
-                            <Title level={3}>Твой лучший результат: 777</Title>
+                            <Title level={3}>{`Твой лучший результат: ${bestScore} `}</Title>
                         ) : null}
 
                         <NavigationMenu />
