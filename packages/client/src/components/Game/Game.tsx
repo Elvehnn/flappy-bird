@@ -9,6 +9,7 @@ import { useAppSelector } from "@/store/hooks";
 import { userSelectors } from "@/store/slices/user/userSlice";
 import { DARK_THEME } from "@/constants/appTheme";
 import { themeSelectors } from "@/store/slices/theme/themeSlice";
+import { getStorageValue } from "@/utils/getStorageValue";
 
 //TODO: положить саунды и аудиоконтекст в стор при загрузке приложения. Иначе долго грузится.
 const { soundElements, audioContext } = createSounds();
@@ -45,7 +46,7 @@ let pipeXThird = constants.CANVAS_WIDTH - (constants.CANVAS_WIDTH / 3) * 2;
 
 // score
 let score = 0;
-let bestScore: number = parseInt(localStorage.getItem("bestScore") || "0");
+let bestScore: number = parseInt(getStorageValue("bestScore", "0"));
 
 const checkCollision = (circle: Circle, rect: Rectangle) => {
     if (
@@ -157,9 +158,7 @@ const Game = () => {
         if (isReady) {
             setIsReady(false);
         }
-        const isSoundEnabled = JSON.parse(
-            localStorage.getItem("soundIsEnabled") || String(false)
-        );
+        const isSoundEnabled = getStorageValue("soundIsEnabled", false);
 
         if (isSoundEnabled && audioContext.state === "suspended") {
             audioContext.resume();
@@ -311,9 +310,7 @@ const Game = () => {
 
     useEffect(() => {
         try {
-            const isSoundEnabled = JSON.parse(
-                localStorage.getItem("soundIsEnabled") || String(false)
-            );
+            const isSoundEnabled = getStorageValue("soundIsEnabled", false);
 
             if (isSoundEnabled && audioContext.state === "suspended") {
                 audioContext.resume();
@@ -422,9 +419,13 @@ const Game = () => {
                     birdYSpeed -=
                         constants.FALL_SPEED * (constants.INTERVAL / 1000);
                 }, constants.INTERVAL);
+
+                return function cleanup() {
+                    clearInterval(interval);
+                };
             }
         }
-    }, []);
+    }, [draw]);
 
     return (
         <>

@@ -1,27 +1,23 @@
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import LadderPage from "./pages/LadderPage/LadderPage";
-import LoginPage from "./pages/login/LoginPage";
-import { SignUpPage } from "./pages/signUp/SignUpPage";
-import ForumPage from "./pages/ForumPage/ForumPage";
-import { ProfilePage } from "./pages/profile/ProfilePage";
-import { ProfileChangePage } from "./pages/profile-change/ProfileChangePage";
+import LadderPage from "@/pages/LadderPage/LadderPage";
+import LoginPage from "@/pages/login/LoginPage";
+import { SignUpPage } from "@/pages/signUp/SignUpPage";
+import ForumPage from "@/pages/ForumPage/ForumPage";
+import { ProfilePage } from "@/pages/profile/ProfilePage";
+import { ProfileChangePage } from "@/pages/profile-change/ProfileChangePage";
 import "./App.css";
 import { lazy, Suspense, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { getYandexToken } from "./services/oAuthYandex";
-import StartPage from "./pages/StartPage/StartPage";
-import { ErrorBoundary } from "./pages/errorPages/ErrorBoundary";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getYandexToken } from "@/services/oAuthYandex";
+import StartPage from "@/pages/StartPage/StartPage";
+import { ErrorBoundary } from "@/pages/errorPages/ErrorBoundary";
 import { ConfigProvider } from "antd";
-import { themeActions, themeSelectors } from "./store/slices/theme/themeSlice";
-import { ThemeNames } from "./store/slices/theme/typings";
-import { MAP_NAME_TO_THEME } from "./constants/appTheme";
+import { themeSelectors } from "@/store/slices/theme/themeSlice";
 import MainLayout from "@/containers/MainLayout/MainLayout";
 import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
 import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
-import { userActions } from "./store/slices/user/userSlice";
-import { getUserFromStorage } from "./utils/getUserFromStorage";
-import { getUserPreferences } from "./services/appTheme";
+import { getAuthorizedUser } from "@/utils/getAuthorizedUser";
 
 export const App = () => {
     const dispatch = useAppDispatch();
@@ -51,23 +47,7 @@ export const App = () => {
     }, []);
 
     useEffect(() => {
-        const user = getUserFromStorage();
-
-        if (user) {
-            dispatch(userActions.setUser(user));
-
-            getUserPreferences(user.id)
-                .then(preferences => {
-                    if (preferences) {
-                        dispatch(
-                            themeActions.setTheme(
-                                MAP_NAME_TO_THEME[preferences as ThemeNames]
-                            )
-                        );
-                    }
-                })
-                .catch(error => console.log(error));
-        }
+        getAuthorizedUser(dispatch);
     }, []);
     if (isLoaded) {
         return (
