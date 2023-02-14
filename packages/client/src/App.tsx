@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import LadderPage from "./pages/LadderPage/LadderPage";
 import LoginPage from "./pages/login/LoginPage";
@@ -26,7 +26,7 @@ import { getUserPreferences } from "./services/appTheme";
 export const App = () => {
     const dispatch = useAppDispatch();
     const { theme } = useAppSelector(themeSelectors.all);
-    const [isLoaded, setIsLoaded] = React.useState<boolean>(false);
+    const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
     const GamePage = lazy(() =>
         import("./pages/GamePage/GamePage").then(module => ({

@@ -20,6 +20,8 @@ const startServer = async () => {
     let srcPath = "";
     let ssrClientPath = "";
 
+    app.use(cors());
+
     if (isDev()) {
         srcPath = path.dirname(require.resolve("client"));
         vite = await createViteServer({
@@ -38,7 +40,6 @@ const startServer = async () => {
 
     app.use(express.json());
 
-    app.use(cors());
     app.use((_, res, next) => {
         res.header("Access-Control-Allow-Origin", "http://localhost:3000");
         res.header("Access-Control-Allow-Credentials", "true");
