@@ -419,9 +419,13 @@ const Game = () => {
                     birdYSpeed -=
                         constants.FALL_SPEED * (constants.INTERVAL / 1000);
                 }, constants.INTERVAL);
+
+                return function cleanup() {
+                    clearInterval(interval);
+                };
             }
         }
-    }, []);
+    }, [draw]);
 
     return (
         <>
