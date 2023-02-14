@@ -1,27 +1,25 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import LadderPage from "./pages/LadderPage/LadderPage";
-import LoginPage from "./pages/login/LoginPage";
-import { SignUpPage } from "./pages/signUp/SignUpPage";
-import ForumPage from "./pages/ForumPage/ForumPage";
-import { ProfilePage } from "./pages/profile/ProfilePage";
-import { ProfileChangePage } from "./pages/profile-change/ProfileChangePage";
+import LadderPage from "@/pages/LadderPage/LadderPage";
+import LoginPage from "@/pages/login/LoginPage";
+import { SignUpPage } from "@/pages/signUp/SignUpPage";
+import ForumPage from "@/pages/ForumPage/ForumPage";
+import { ProfilePage } from "@/pages/profile/ProfilePage";
+import { ProfileChangePage } from "@/pages/profile-change/ProfileChangePage";
 import "./App.css";
 import { lazy, Suspense, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { getYandexToken } from "./services/oAuthYandex";
-import StartPage from "./pages/StartPage/StartPage";
-import { ErrorBoundary } from "./pages/errorPages/ErrorBoundary";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { getYandexToken } from "@/services/oAuthYandex";
+import StartPage from "@/pages/StartPage/StartPage";
+import { ErrorBoundary } from "@/pages/errorPages/ErrorBoundary";
 import { ConfigProvider } from "antd";
-import { themeActions, themeSelectors } from "./store/slices/theme/themeSlice";
-import { ThemeNames } from "./store/slices/theme/typings";
-import { MAP_NAME_TO_THEME } from "./constants/appTheme";
+import { themeSelectors } from "@/store/slices/theme/themeSlice";
 import MainLayout from "@/containers/MainLayout/MainLayout";
 import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
 import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
-import { userActions } from "./store/slices/user/userSlice";
-import { getUserFromStorage } from "./utils/getUserFromStorage";
-import { getUserPreferences } from "./services/appTheme";
+import { userActions } from "@/store/slices/user/userSlice";
+import { getUserFromStorage } from "@/utils/getUserFromStorage";
+import { getUserPreferences, saveUserPreferences } from "@/services/appTheme";
 
 export const App = () => {
     const dispatch = useAppDispatch();
@@ -58,17 +56,12 @@ export const App = () => {
 
             getUserPreferences(user.id)
                 .then(preferences => {
-                    if (preferences) {
-                        dispatch(
-                            themeActions.setTheme(
-                                MAP_NAME_TO_THEME[preferences as ThemeNames]
-                            )
-                        );
-                    }
+                    saveUserPreferences(preferences, dispatch, user.id);
                 })
                 .catch(error => console.log(error));
         }
     }, []);
+
     if (isLoaded) {
         return (
             <ConfigProvider theme={theme.design}>
@@ -113,6 +106,8 @@ export const App = () => {
             </ConfigProvider>
         );
     }
+
+    return null;
 };
 
 export default App;

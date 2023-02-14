@@ -9,10 +9,8 @@ import { getUserInfo, signin } from "@/services/authorization";
 import "./LoginForm.scss";
 import { LOGIN_FORM_VALIDATION_SCHEMA } from "./loginFormValidationSchema";
 import { signinWithYandex } from "@/services/oAuthYandex";
-import { themeActions } from "@/store/slices/theme/themeSlice";
-import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
 import { ThemeNames } from "@/store/slices/theme/typings";
-import { getUserPreferences } from "@/services/appTheme";
+import { getUserPreferences, saveUserPreferences } from "@/services/appTheme";
 import { useNotification } from "@/hooks/useNorification";
 
 export type LoginFormValuesType = {
@@ -31,7 +29,10 @@ export const LoginForm = () => {
     const [openNotification, contextHolder] = useNotification();
     const [isLoading, setIsLoading] = useState(false);
 
-    const submitHandler = async (values: LoginFormValuesType) => {
+    const submitHandler = async (
+        values: LoginFormValuesType,
+        helpers: { resetForm: (arg0: { values: LoginFormValuesType }) => void }
+    ) => {
         setIsLoading(true);
 
         const isLoggedIn = await signin(values);
@@ -39,8 +40,6 @@ export const LoginForm = () => {
         openNotification({
             status: isLoggedIn ? 200 : 401,
         });
-
-        setIsLoading(false);
 
         if (isLoggedIn) {
             const userFormServer = await getUserInfo();
@@ -53,20 +52,17 @@ export const LoginForm = () => {
                     userFormServer.id
                 )) as Nullable<ThemeNames>;
 
-                if (preferences) {
-                    dispatch(
-                        themeActions.setTheme(MAP_NAME_TO_THEME[preferences])
-                    );
-
-                    localStorage.setItem(
-                        `${userFormServer.id}_theme`,
-                        preferences
-                    );
-                }
+                saveUserPreferences(preferences, dispatch, userFormServer.id);
 
                 navigate("/");
             }
         }
+
+        helpers.resetForm({
+            values,
+        });
+
+        setIsLoading(false);
     };
 
     const formik = useFormik({
