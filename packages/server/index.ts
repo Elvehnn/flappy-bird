@@ -40,6 +40,12 @@ const startServer = async () => {
 
     app.use(express.json());
 
+    app.use((_, res, next) => {
+        res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.header("Access-Control-Allow-Credentials", "true");
+        next();
+    });
+
     await sequelize.sync();
 
     //Ладдер хендлеры
@@ -101,6 +107,8 @@ const startServer = async () => {
 
         if (user && user.app_theme_name) {
             res.status(200).json(user.app_theme_name);
+        } else {
+            res.status(500);
         }
     });
 

@@ -453,7 +453,7 @@ const Game = () => {
                 />
             </div>
             <Modal
-                visible={isShowModal}
+                open={isShowModal}
                 onOk={() => window.location.reload()}
                 cancelButtonProps={{ style: { display: "none" } }}
                 closable={false}
