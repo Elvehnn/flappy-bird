@@ -55,9 +55,30 @@ const startServer = async () => {
     });
 
     app.post("/api/v1/ladder", async (req, res) => {
-        const ladder = await Ladder.create(req.body);
-        res.json(ladder.dataValues);
+        const isExist = await Ladder.findOne({
+            where: { ladder_id: req.body.ladder_id },
+        });
+        if (!isExist) {
+            const ladder = await Ladder.create(req.body);
+            res.json(ladder.dataValues);
+        } else {
+            if (req.body.count > (isExist?.dataValues?.count || 0)) {
+                await Ladder.update(req.body, {
+                    where: { ladder_id: req.body.ladder_id },
+                });
+            }
+
+            res.json("OK");
+        }
     });
+    app.get("/api/v1/ladder/:id", async (req, res) => {
+        const score = await Ladder.findOne({
+            where: { ladder_id: req.params.id },
+        });
+
+        res.send(score);
+    });
+
     //Форум хендлеры
     app.get("/api/v1/forum", async (_, res) => {
         const ladder = await Forum.findAll();

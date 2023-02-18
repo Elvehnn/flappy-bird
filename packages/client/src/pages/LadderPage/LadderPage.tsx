@@ -1,5 +1,5 @@
 import MainLayout from "@/containers/MainLayout/MainLayout";
-import { Table } from "antd";
+import { Spin, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import ContentContainer from "@/containers/ContentContainer/ContentContainer";
 import React, { useEffect, useMemo } from "react";
@@ -8,32 +8,33 @@ import {
     leaderboardActions,
     leaderboardSelector,
 } from "@/store/slices/leaderboard/leaderBoardSlice";
-import { LeaderBoardUser } from "@/api/typesApi";
+import { LadderScore } from "@/api/typesApi";
 import { formattedDate } from "@/utils/formattedDate";
 
-interface DataType extends LeaderBoardUser {
+interface DataType extends LadderScore {
     key: number;
 }
 
 const LadderPage = () => {
     const dispatch = useAppDispatch();
 
-    const columns: ColumnsType<DataType> = useMemo(
+    const columns: ColumnsType<Omit<DataType, "ladder_id">> = useMemo(
         () => [
+            { title: "Рейтинг", dataIndex: "key", key: "key" },
             {
                 title: "Логин пользователя",
-                dataIndex: "name",
-                key: "name",
+                dataIndex: "user_name",
+                key: "user_name",
             },
             {
                 title: "Дата",
-                dataIndex: "date",
-                key: "date",
+                dataIndex: "created",
+                key: "created",
             },
             {
                 title: "Колличество баллов",
-                dataIndex: "score",
-                key: "score",
+                dataIndex: "count",
+                key: "count",
             },
         ],
         []
@@ -47,25 +48,33 @@ const LadderPage = () => {
 
     const formattedData = useMemo(
         () =>
-            data.map((user, index) => {
-                const { score, name, date } = user.data.result;
+            (data || []).map((user, index) => {
+                const { count, created, user_name } = user;
 
                 return {
-                    key: index,
-                    name,
-                    date: formattedDate(new Date(date)),
-                    score,
+                    key: index + 1,
+                    user_name,
+                    created: created ? formattedDate(new Date(created)) : "",
+                    count,
                 };
             }),
         [data]
     );
 
+    if (!data)
+        return (
+            <MainLayout data-testid="leader-board">
+                <ContentContainer title="Доска лидеров">
+                    Данные не найдены
+                </ContentContainer>
+            </MainLayout>
+        );
+
     return (
         <MainLayout data-testid="leader-board">
             <ContentContainer title="Доска лидеров">
                 {fetching ? (
-                    // TODO: лоадер
-                    "Загрузка..."
+                    <Spin />
                 ) : (
                     <Table
                         columns={columns}

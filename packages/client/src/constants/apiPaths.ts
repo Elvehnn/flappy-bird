@@ -27,6 +27,8 @@ export const ENDPOINTS = {
         CHANGE_PASSWORD: "user/password",
     },
 
+    LADDER: 'api/v1/ladder',
+
     FORUM: {
         THEMES: "api/v1/forum",
         COMMENTS: "api/v1/forum-comments",

@@ -1,15 +1,19 @@
-import { FunctionComponent, ReactElement } from "react";
+import { FunctionComponent, ReactElement, useEffect } from "react";
 import { Layout, Row, Col, Button, Image } from "antd";
 import "./MainLayout.sass";
 import { NavigationMenu } from "@/components/navigation/Navigation";
 import { NavLink } from "react-router-dom";
 import "./MainPage.scss";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { userSelectors } from "@/store/slices/user/userSlice";
 import Title from "antd/lib/typography/Title";
 import { COLORED_LOGO } from "@/constants/imagesPaths";
 import { themeSelectors } from "@/store/slices/theme/themeSlice";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher/ThemeSwitcher";
+import {
+    leaderboardActions,
+    leaderboardSelector,
+} from "@/store/slices/leaderboard/leaderBoardSlice";
 
 const { Content, Footer, Header } = Layout;
 
@@ -20,7 +24,15 @@ type MainLayoutProps = {
 const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
     const { user } = useAppSelector(userSelectors.all);
     const { theme } = useAppSelector(themeSelectors.all);
-    const bestScore = window.localStorage.getItem('bestScore') ?? 0
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (user?.id) {
+            dispatch(leaderboardActions.getUserScoreInfo(user?.id));
+        }
+    }, [user]);
+
+    const { userScoreInfo } = useAppSelector(leaderboardSelector.leaders);
 
     return (
         <Layout
@@ -50,7 +62,9 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
                         <h2>Привет, {user ? user.login : "Юзер"}!</h2>
 
                         {user ? (
-                            <Title level={3}>{`Твой лучший результат: ${bestScore} `}</Title>
+                            <Title level={3}>{`Твой лучший результат: ${
+                                userScoreInfo?.count || 0
+                            } `}</Title>
                         ) : null}
 
                         <NavigationMenu />
