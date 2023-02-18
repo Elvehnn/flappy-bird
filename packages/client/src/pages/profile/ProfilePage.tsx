@@ -15,10 +15,12 @@ import { userSelectors } from "@/store/slices/user/userSlice";
 import { useAppSelector } from "@/store/hooks";
 import { PATH } from "@/constants/apiPaths";
 import MainLayout from "@/containers/MainLayout/MainLayout";
+import { leaderboardSelector } from "@/store/slices/leaderboard/leaderBoardSlice";
 
 export const ProfilePage = () => {
     const navigate = useNavigate();
     const { user } = useAppSelector(userSelectors.all);
+    const { userScoreInfo } = useAppSelector(leaderboardSelector.leaders);
 
     return (
         <MainLayout>
@@ -50,18 +52,11 @@ export const ProfilePage = () => {
                         <Col>
                             <Statistic
                                 title="Best Score"
-                                value={112893}
+                                value={userScoreInfo?.count}
                                 style={{
                                     marginTop: 10,
                                     marginRight: "3rem",
                                 }}
-                            />
-                        </Col>
-                        <Col>
-                            <Statistic
-                                title="Rank"
-                                value={1}
-                                style={{ marginTop: 10 }}
                             />
                         </Col>
                     </Row>
