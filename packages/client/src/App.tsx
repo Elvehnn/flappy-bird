@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import LadderPage from "@/pages/LadderPage/LadderPage";
 import LoginPage from "@/pages/login/LoginPage";
@@ -92,6 +92,8 @@ export const App = () => {
                 </ErrorBoundary>
             </ConfigProvider>
         );
+    } else {
+        return <Fragment />;
     }
 };
 
