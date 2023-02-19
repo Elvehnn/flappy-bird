@@ -1,30 +1,22 @@
-import { ResponseStatus, UserFromServer } from "@/api/typesApi";
+import { ResponseStatus } from "@/api/typesApi";
 import { AxiosError } from "axios";
 import axios from "./axiosSetup";
-import { PATH } from "@/constants/apiPaths";
+import { ENDPOINTS, PATH } from "@/constants/apiPaths";
 
-const TEAM_NAME = "pachkateam";
-const RATING_FIELD_NAME = "result";
+export const getLadder = async () =>
+    await axios.get(`${PATH.MAIN}${ENDPOINTS.LADDER}`);
 
-export const getLeaderboard = async () =>
-    await axios.post(`${PATH.BASE}leaderboard/${TEAM_NAME}`, {
-        ratingFieldName: RATING_FIELD_NAME,
-        cursor: 0,
-        limit: 100,
-    });
-
-export const addLeaderboardScore = async (
-    user: UserFromServer,
-    score: string
+export const addLadder = async (
+    ladder_id: number,
+    user_name: string,
+    count: number
 ): Promise<ResponseStatus | AxiosError> =>
-    await axios.post(`${PATH.BASE}leaderboard`, {
-        data: {
-            [RATING_FIELD_NAME]: {
-                score,
-                name: user.login,
-                date: new Date(),
-            },
-        },
-        ratingFieldName: RATING_FIELD_NAME,
-        teamName: TEAM_NAME,
+    await axios.post(`${PATH.MAIN}${ENDPOINTS.LADDER}`, {
+        ladder_id,
+        user_name,
+        count,
+        created: new Date(),
     });
+
+export const getUserScoreInfo = async (id: number) =>
+    await axios.get(`${PATH.MAIN}${ENDPOINTS.LADDER}/${id}`);
