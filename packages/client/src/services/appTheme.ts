@@ -20,6 +20,22 @@ export const getUserPreferences = async (userId: number) => {
     }
 };
 
+export const setUserPreferences = async (id: number, dispatch: AppDispatch) => {
+    try {
+        const preferences = await getUserPreferences(id);
+
+        if (preferences) {
+            dispatch(
+                themeActions.setTheme(
+                    MAP_NAME_TO_THEME[preferences as ThemeNames]
+                )
+            );
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const addUserPreferences = async (
     userId: number,
     app_theme_name: string

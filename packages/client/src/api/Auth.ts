@@ -1,6 +1,5 @@
 import { ENDPOINTS, OAUTH_PATH } from "@/constants/apiPaths";
 import { AxiosError } from "axios";
-import { apiErrorHandler } from "./apiErrorHandler";
 import axios from "./axiosSetup";
 import {
     LoginRequestData,
@@ -33,9 +32,6 @@ export const getUserDataRequest = async (): Promise<
 > => {
     const response = await axios.get(ENDPOINTS.AUTH.PROFILE);
 
-    if (response.status !== 200) {
-        apiErrorHandler(response.status);
-    }
     return response.data;
 };
 
