@@ -3,13 +3,18 @@ import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
 import { LoginForm } from "./LoginForm";
+import { Provider } from "react-redux";
+import store from "@/store/store";
 
 describe("LoginForm", () => {
     const renderLoginForm = () =>
         render(
-            <MemoryRouter>
-                <LoginForm />
-            </MemoryRouter>
+            <Provider store={store}>
+                {" "}
+                <MemoryRouter>
+                    <LoginForm />
+                </MemoryRouter>
+            </Provider>
         );
 
     beforeEach(() => {
