@@ -19,6 +19,7 @@ import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
 import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
 import Preloader from "@/components/Preloader/Preloader";
 import { getAuthorizedUser } from "@/utils/getAuthorizedUser";
+import Team from "@/pages/Team/Team";
 
 export const App = () => {
     const dispatch = useAppDispatch();
@@ -88,6 +89,7 @@ export const App = () => {
                                 path="/profile-change"
                                 element={<ProfileChangePage />}
                             />
+                            <Route path="/team" element={<Team />} />
                             <Route path="/*" element={<div>error404</div>} />
                         </Routes>
                     </div>
