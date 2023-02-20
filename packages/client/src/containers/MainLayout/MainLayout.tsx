@@ -20,7 +20,7 @@ type MainLayoutProps = {
 const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
     const { user } = useAppSelector(userSelectors.all);
     const { theme } = useAppSelector(themeSelectors.all);
-    const bestScore = window.localStorage.getItem('bestScore') ?? 0
+    const bestScore = window.localStorage.getItem("bestScore") ?? 0;
 
     return (
         <Layout
@@ -50,7 +50,10 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
                         <h2>Привет, {user ? user.login : "Юзер"}!</h2>
 
                         {user ? (
-                            <Title level={3}>{`Твой лучший результат: ${bestScore} `}</Title>
+                            <Title
+                                level={
+                                    3
+                                }>{`Твой лучший результат: ${bestScore} `}</Title>
                         ) : null}
 
                         <NavigationMenu />
@@ -71,7 +74,13 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
                 </Row>
             </Content>
 
-            <Footer className="layout_footer">By Пачка и Точка</Footer>
+            <Footer className="layout_footer">
+                <NavLink
+                    to={"/team"}
+                    style={{ color: theme.design.token.colorText }}>
+                    © By Пачка и Точка
+                </NavLink>
+            </Footer>
         </Layout>
     );
 };
