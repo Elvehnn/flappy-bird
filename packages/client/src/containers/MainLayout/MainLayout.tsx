@@ -50,10 +50,9 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
                         <h2>Привет, {user ? user.login : "Юзер"}!</h2>
 
                         {user ? (
-                            <Title
-                                level={
-                                    3
-                                }>{`Твой лучший результат: ${bestScore} `}</Title>
+                            <Title level={3}>
+                                {`Твой лучший результат: ${bestScore}`}
+                            </Title>
                         ) : null}
 
                         <NavigationMenu />

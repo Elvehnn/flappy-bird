@@ -9,7 +9,7 @@ const Team = () => {
     const { theme } = useAppSelector(themeSelectors.all);
     const navigate = useNavigate();
 
-    const onClick = () => {
+    const onBackButtonClick = () => {
         navigate(-1);
     };
 
@@ -59,7 +59,7 @@ const Team = () => {
                 })}
             </div>
 
-            <Button onClick={onClick} style={{ width: 80 }}>
+            <Button onClick={onBackButtonClick} style={{ width: 80 }}>
                 НАЗАД
             </Button>
         </Layout>

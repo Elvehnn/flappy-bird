@@ -17,9 +17,9 @@ import { themeSelectors } from "@/store/slices/theme/themeSlice";
 import MainLayout from "@/containers/MainLayout/MainLayout";
 import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
 import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
-import Preloader from "./components/Preloader/Preloader";
+import Preloader from "@/components/Preloader/Preloader";
 import { getAuthorizedUser } from "@/utils/getAuthorizedUser";
-import Team from "./pages/Team/Team";
+import Team from "@/pages/Team/Team";
 
 export const App = () => {
     const dispatch = useAppDispatch();
