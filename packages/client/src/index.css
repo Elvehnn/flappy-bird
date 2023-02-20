@@ -82,4 +82,10 @@ h2 {
     font-weight: 600;
     margin: 10px 0;
 }
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 10px 0;
+    text-align: center;
+}
 /*--------------------*/

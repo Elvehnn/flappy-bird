@@ -37,7 +37,7 @@ export const DARK_THEME = {
             colorWarning: "#fca048",
             colorError: "#FF4D4F",
             colorText: "rgba(0, 0, 0, 0.75)",
-            colorTextSecondary: "rgba(0, 0, 0, 0.25)",
+            colorTextSecondary: "rgba(255, 255, 255, 0.75)",
             colorDisabled: "rgba(0, 0, 0, 0.45)",
             borderRadiusBase: "5px",
             boxShadowBase:

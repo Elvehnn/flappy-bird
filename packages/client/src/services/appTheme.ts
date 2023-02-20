@@ -52,3 +52,19 @@ export const addUserPreferences = async (
         return null;
     }
 };
+
+export const saveUserPreferences = (
+    preferences: Nullable<ThemeNames>,
+    dispatch: AppDispatch,
+    userId: number
+) => {
+    if (preferences) {
+        dispatch(themeActions.setTheme(MAP_NAME_TO_THEME[preferences]));
+
+        localStorage.setItem(`${userId}_theme`, preferences);
+    } else {
+        localStorage.setItem(`${userId}_theme`, ThemeNames.Dark);
+
+        addUserPreferences(userId, ThemeNames.Dark);
+    }
+};
