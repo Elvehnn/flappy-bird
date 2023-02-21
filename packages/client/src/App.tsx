@@ -19,11 +19,14 @@ import MainThemePage from "@/pages/ForumPage/pages/MainThemePage/MainThemePage";
 import ThemePage from "@/pages/ForumPage/pages/ThemePage/ThemePage";
 import Preloader from "@/components/Preloader/Preloader";
 import { getAuthorizedUser } from "@/utils/getAuthorizedUser";
+import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
+import { userSelectors } from "@/store/slices/user/userSlice";
 import Team from "@/pages/Team/Team";
 
 export const App = () => {
     const dispatch = useAppDispatch();
     const { theme } = useAppSelector(themeSelectors.all);
+    const { user } = useAppSelector(userSelectors.all);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
     const GamePage = lazy(() =>
@@ -74,7 +77,7 @@ export const App = () => {
                             />
                             <Route path="/sign-in" element={<LoginPage />} />
                             <Route path="/sign-up" element={<SignUpPage />} />
-                            <Route path="/forum" element={<ForumPage />} />
+                            <Route path="/forum" element={<ProtectedRoute isAuth={user}><ForumPage /></ProtectedRoute>} />
                             <Route
                                 path="/forum/:mainThemeId"
                                 element={<MainThemePage />}
@@ -83,11 +86,11 @@ export const App = () => {
                                 path="/forum/:mainThemeId/:themeId"
                                 element={<ThemePage />}
                             />
-                            <Route path="/ladder" element={<LadderPage />} />
-                            <Route path="/profile" element={<ProfilePage />} />
+                            <Route path="/ladder" element={<ProtectedRoute isAuth={user}><LadderPage /></ProtectedRoute>} />
+                            <Route path="/profile" element={<ProtectedRoute isAuth={user}><ProfilePage /></ProtectedRoute>} />
                             <Route
                                 path="/profile-change"
-                                element={<ProfileChangePage />}
+                                element={<ProtectedRoute isAuth={user}><ProfileChangePage /></ProtectedRoute>}
                             />
                             <Route path="/team" element={<Team />} />
                             <Route path="/*" element={<div>error404</div>} />
