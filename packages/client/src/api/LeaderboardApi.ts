@@ -1,17 +1,17 @@
 import { ResponseStatus } from "@/api/typesApi";
 import { AxiosError } from "axios";
 import axios from "./axiosSetup";
-import { ENDPOINTS } from "@/constants/apiPaths";
+import { ENDPOINTS, PATH } from "@/constants/apiPaths";
 
 export const getLadder = async () =>
-    await axios.get(`http://localhost:5000/${ENDPOINTS.LADDER}`);
+    await axios.get(`${PATH.MAIN}${ENDPOINTS.LADDER}`);
 
 export const addLadder = async (
     ladder_id: number,
     user_name: string,
     count: number
 ): Promise<ResponseStatus | AxiosError> =>
-    await axios.post(`http://localhost:5000/${ENDPOINTS.LADDER}`, {
+    await axios.post(`${PATH.MAIN}${ENDPOINTS.LADDER}`, {
         ladder_id,
         user_name,
         count,
@@ -19,4 +19,4 @@ export const addLadder = async (
     });
 
 export const getUserScoreInfo = async (id: number) =>
-    await axios.get(`http://localhost:5000/${ENDPOINTS.LADDER}/${id}`);
+    await axios.get(`${PATH.MAIN}${ENDPOINTS.LADDER}/${id}`);
