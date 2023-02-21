@@ -6,7 +6,6 @@ import { SignUpPage } from "@/pages/signUp/SignUpPage";
 import ForumPage from "@/pages/ForumPage/ForumPage";
 import { ProfilePage } from "@/pages/profile/ProfilePage";
 import { ProfileChangePage } from "@/pages/profile-change/ProfileChangePage";
-import "./App.css";
 import { lazy, Suspense, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getYandexToken } from "@/services/oAuthYandex";
