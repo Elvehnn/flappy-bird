@@ -123,7 +123,7 @@ const startServer = async () => {
     //Темизация приложения (хендлеры)
     app.get("/api/v1/user-preferences/:id", async (req, res) => {
         const user = await UserPreferences.findOne({
-            where: { user_id: req.params.id.substring(1) },
+            where: { user_id: req.params.id },
         });
 
         if (user && user.app_theme_name) {
@@ -135,12 +135,12 @@ const startServer = async () => {
 
     app.post("/api/v1/user-preferences/:id", async (req, res) => {
         const user = await UserPreferences.findOne({
-            where: { user_id: req.params.id.substring(1) },
+            where: { user_id: req.params.id },
         });
 
         if (user) {
             const updatedUser = await UserPreferences.update(req.body, {
-                where: { user_id: req.params.id.substring(1) },
+                where: { user_id: req.params.id },
             });
 
             let status = 500;
@@ -148,7 +148,7 @@ const startServer = async () => {
 
             if (updatedUser) {
                 payload = (await UserPreferences.findOne({
-                    where: { user_id: req.params.id.substring(1) },
+                    where: { user_id: req.params.id },
                 })) as UserPreferences | null;
 
                 status = 200;
@@ -156,7 +156,7 @@ const startServer = async () => {
             res.status(status).json(payload);
         } else {
             const newUser = await UserPreferences.create({
-                user_id: req.params.id.substring(1),
+                user_id: req.params.id,
                 ...req.body,
             });
 

@@ -1,4 +1,6 @@
 export const PRESENTATION_IMAGE = "/assets/images/bkg-long.png";
+export const PRESENTATION_IMAGE_DARK = "/assets/images/bkg-long-dark.png";
+export const LOADING_TITLE = "/assets/images/Loading.png";
 
 export const COLORED_LOGO = "/assets/images/Flappy_Logo.png";
 export const BLACK_N_WHITE_LOGO = "/assets/images/Flappy_Logo_BW.png";

@@ -11,6 +11,7 @@ export default {
     moduleNameMapper: {
         "\\.(css|less|scss|sass|png|svg|jpg)$": "identity-obj-proxy",
         "^antd/es/": "antd/lib/",
+        "^@/(.*)$": "<rootDir>/src/$1",
     },
 
     transformIgnorePatterns: [

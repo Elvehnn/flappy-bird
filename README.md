@@ -1,76 +1,95 @@
-### Как запускать?
+Выпускной командный проект курса [Мидл фронтенд-разработчик](https://practicum.yandex.ru/middle-frontend/)
+# FlappyBird
+<img src="https://user-images.githubusercontent.com/70837634/220103879-04805743-45f0-4e50-959e-9da15aba4b4b.png" alt="demo" style="width: 600px;"/>  
 
-1. Убедитесь что у вас установлен `node` и `docker`
-2. Выполните команду `yarn bootstrap` - это обязательный шаг, без него ничего работать не будет :)
-3. Выполните команду `yarn dev`
-3. Выполните команду `yarn dev --scope=client` чтобы запустить только клиент
-4. Выполните команду `yarn dev --scope=server` чтобы запустить только server
+Демо: [будет]()
 
+## Стек использумых технологий и Web API:
+- `React`, `Redux Toolkit`
+- `Ant Design`
+- `Sass`
+- `Express`
+- `Docker`, `Docker-Compose` 
+- `PostgreSQL` 
+- `nginx`
+- `Canvas`
+- `ServiceWorker`
+- `Web Audio`
 
-### Как добавить зависимости?
-В этом проекте используется `monorepo` на основе [`lerna`](https://github.com/lerna/lerna)
+## Установка и запуск проекта
 
-Чтобы добавить зависимость для клиента 
-```yarn lerna add {your_dep} --scope client```
+Для запуска клонируйте репозиторий и выполните следующие действия:
 
-Для сервера
-```yarn lerna add {your_dep} --scope server```
+- Убедитесь что у вас установлен `node` и `docker`
+- `yarn bootstrap` - это обязательный шаг, без него ничего работать не будет :)
+- `yarn build` - для корректной работы SSR
 
-И для клиента и для сервера
-```yarn lerna add {your_dep}```
+Проект представляет из себя `монорепозиторий` на основе [`lerna`](https://github.com/lerna/lerna) и состоит из следующих пакетов:
 
+### Управление зависимостями
 
-Если вы хотите добавить dev зависимость, проделайте то же самое, но с флагом `dev`
-```yarn lerna add {your_dep} --dev --scope server```
+Чтобы добавить зависимость для клиента:
+```shell
+yarn lerna add {your_dep} --scope client
+```
 
+Для сервера:
+```shell
+yarn lerna add {your_dep} --scope server
+```
+
+И для клиента и для сервер:
+```shell
+yarn lerna add {your_dep}
+```
+
+Если вы хотите добавить dev зависимость, проделайте то же самое, но с флагом `dev`:
+```shell
+yarn lerna add {your_dep} --dev --scope server
+```
 
 ### Тесты
 
 Для клиента используется [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro/)
 
-```yarn test```
+`yarn test`
 
 ### Линтинг
 
-```yarn lint```
+`yarn lint`
 
 ### Форматирование prettier
 
-```yarn format```
+`yarn format`
 
 ### Production build
 
-```yarn build```
+`yarn build`
 
 И чтобы посмотреть что получилось
-
 
 `yarn preview --scope client`
 `yarn preview --scope server`
 
-## Хуки
-В проекте используется [lefthook](https://github.com/evilmartians/lefthook)
-Если очень-очень нужно пропустить проверки, используйте `--no-verify` (но не злоупотребляйте :)
-
-## Ой, ничего не работает :(
-
-Откройте issue, я приду :)
-
-## Автодеплой статики на vercel
-Зарегистрируйте аккаунт на [vercel](https://vercel.com/)
-Следуйте [инструкции](https://vitejs.dev/guide/static-deploy.html#vercel-for-git)
-В качестве `root directory` укажите `packages/client`
-
-Все ваши PR будут автоматически деплоиться на vercel. URL вам предоставит деплоящий бот
-
 ## Production окружение в докере
+
 Перед первым запуском выполните `node init.js`
 
-
 `docker compose up` - запустит три сервиса
+
 1. nginx, раздающий клиентскую статику (client)
 2. node, ваш сервер (server)
 3. postgres, вашу базу данных (postgres)
 
 Если вам понадобится только один сервис, просто уточните какой в команде
 `docker compose up {sevice_name}`, например `docker compose up server`
+
+## Хуки
+
+В проекте используется [lefthook](https://github.com/evilmartians/lefthook)
+Если очень-очень нужно пропустить проверки, используйте `--no-verify` (но не злоупотребляйте :)
+
+## Команда
+| <img src="https://avatars.githubusercontent.com/u/86188505" alt="Dmitry avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/42086901" alt="Artem avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/46155717" alt="Alexandr avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/70837634" alt="Elena avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/88541391" alt="Andrey avatar" style="height: 80px; width: 80px;"/> |
+|-------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| [Дмитрий](https://github.com/dubletab)                                                                                                         | [Артем](https://github.com/off-art)                                                                                                       | [Александр](https://github.com/alexmkk)                                                                                                             | [Елена](https://github.com/Elvehnn)                                                                                                                  | [Андрей](https://github.com/Spolete)                                                                                                             |                                                      

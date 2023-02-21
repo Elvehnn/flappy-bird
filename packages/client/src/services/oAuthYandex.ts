@@ -5,9 +5,7 @@ import { getUserInfo } from "./authorization";
 import { apiErrorHandler } from "@/api/apiErrorHandler";
 import { userActions } from "@/store/slices/user/userSlice";
 import { OAUTH_PATH } from "@/constants/apiPaths";
-import { themeActions } from "@/store/slices/theme/themeSlice";
-import { MAP_NAME_TO_THEME } from "@/constants/appTheme";
-import { getUserPreferences } from "./appTheme";
+import { getUserPreferences, saveUserPreferences } from "./appTheme";
 import { AppDispatch } from "@/store/store";
 
 export const signinWithYandex = async () => {
@@ -53,11 +51,7 @@ export const getYandexToken = async (code: string, dispatch: AppDispatch) => {
             dispatch(userActions.setUser(userFormServer));
 
             const preferences = await getUserPreferences(userFormServer.id);
-
-            if (preferences) {
-                dispatch(themeActions.setTheme(MAP_NAME_TO_THEME[preferences]));
-                localStorage.setItem(`${userFormServer.id}_theme`, preferences);
-            }
+            saveUserPreferences(preferences, dispatch, userFormServer.id);
         }
 
         window.history.pushState({}, "", OAUTH_PATH.REDIRECT_URL);

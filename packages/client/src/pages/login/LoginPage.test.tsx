@@ -2,13 +2,18 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router-dom";
 import LoginPage from "./LoginPage";
+import { Provider } from "react-redux";
+import store from "@/store/store";
 
 describe("LoginPage", () => {
     const renderLoginPage = () =>
         render(
-            <MemoryRouter>
-                <LoginPage />
-            </MemoryRouter>
+            <Provider store={store}>
+                {" "}
+                <MemoryRouter>
+                    <LoginPage />
+                </MemoryRouter>
+            </Provider>
         );
 
     beforeEach(() => {
@@ -17,7 +22,6 @@ describe("LoginPage", () => {
 
     test("render LoginPage", () => {
         expect(screen.getByTestId("login-page")).toBeInTheDocument();
-        expect(screen.getByTestId("video-container")).toBeInTheDocument();
         expect(screen.getByTestId("form-container")).toBeInTheDocument();
         expect(screen.getByTestId("logo")).toBeInTheDocument();
         expect(screen.getByTestId("logo-underline")).toBeInTheDocument();

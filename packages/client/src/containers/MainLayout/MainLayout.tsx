@@ -85,7 +85,13 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
                 </Row>
             </Content>
 
-            <Footer className="layout_footer">By Пачка и Точка</Footer>
+            <Footer className="layout_footer">
+                <NavLink
+                    to={"/team"}
+                    style={{ color: theme.design.token.colorText }}>
+                    © By Пачка и Точка
+                </NavLink>
+            </Footer>
         </Layout>
     );
 };
