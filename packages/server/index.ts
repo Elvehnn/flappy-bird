@@ -7,6 +7,7 @@ import { createServer as createViteServer } from "vite";
 import type { ViteDevServer } from "vite";
 import { sequelize } from "./db";
 import { Forum, ForumComments, Ladder, UserPreferences } from "./tables";
+import helmet from "helmet";
 dotenv.config();
 
 const isDev = () => process.env.NODE_ENV === "development";
@@ -21,6 +22,12 @@ const startServer = async () => {
     let ssrClientPath = "";
 
     app.use(cors());
+
+    app.use(helmet.xssFilter());
+    app.use(function (_, res, next) {
+        res.setHeader("X-XSS-Protection", "1; mode=block");
+        next();
+    });
 
     if (isDev()) {
         srcPath = path.dirname(require.resolve("client"));
