@@ -5,6 +5,8 @@ import LoginPage from "./LoginPage";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 
+jest.mock("../../constants/apiPaths", () => ({}));
+
 describe("LoginPage", () => {
     const renderLoginPage = () =>
         render(
