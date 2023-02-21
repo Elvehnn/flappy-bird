@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useEventListener from "@use-it/event-listener";
 import * as constants from "./helpers";
 import { Modal } from "antd";
 import { createSounds } from "../SoundPanel/createSounds";
 import { SoundPanel } from "../SoundPanel/SoundPanel";
-import { addScore } from "@/services/leaderboard";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { userSelectors } from "@/store/slices/user/userSlice";
 import { DARK_THEME } from "@/constants/appTheme";
 import { themeSelectors } from "@/store/slices/theme/themeSlice";
 import { getStorageValue } from "@/utils/getStorageValue";
+import { leaderboardActions } from "@/store/slices/leaderboard/leaderBoardSlice";
 
 //TODO: положить саунды и аудиоконтекст в стор при загрузке приложения. Иначе долго грузится.
 const { soundElements, audioContext } = createSounds();
@@ -150,8 +150,24 @@ const Game = () => {
     const [isReady, setIsReady] = useState<boolean>(true);
     const canvas = useRef<HTMLCanvasElement>(null);
 
+    const dispatch = useAppDispatch();
+
     const { user } = useAppSelector(userSelectors.all);
     const { theme } = useAppSelector(themeSelectors.all);
+
+    const handleOk = useCallback(() => {
+        if (user) {
+            const data = {
+                ladder_id: user.id,
+                count: score,
+                user_name: user.login,
+            };
+
+            dispatch(leaderboardActions.addScore(data)).then(() => {
+                window.location.reload();
+            });
+        }
+    }, [user]);
 
     // bird jump
     const jump = () => {
@@ -334,10 +350,6 @@ const Game = () => {
                 const interval = setInterval(() => {
                     // dying
                     if (touchedPipe() || fallOut()) {
-                        if (user) {
-                            addScore(user, score.toString());
-                        }
-
                         if (score > bestScore) {
                             bestScore = score;
                             localStorage.setItem("bestScore", score.toString());
@@ -454,7 +466,7 @@ const Game = () => {
             </div>
             <Modal
                 open={isShowModal}
-                onOk={() => window.location.reload()}
+                onOk={handleOk}
                 cancelButtonProps={{ style: { display: "none" } }}
                 closable={false}
                 style={{ top: "40vh" }}>

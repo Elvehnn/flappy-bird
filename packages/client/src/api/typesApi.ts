@@ -60,16 +60,11 @@ export type UserInfoRequestData = {
     avatar: string;
 };
 
-export interface LeaderBoardUser {
-    date: string;
-    name: string;
-    score: number;
-}
-
-export interface LeaderBoardRequestData {
-    data: {
-        result: LeaderBoardUser;
-    };
+export interface LadderScore {
+    ladder_id: number;
+    user_name: string;
+    count: number;
+    created?: Date | string;
 }
 
 export interface ForumTheme {
