@@ -63,7 +63,7 @@ const MainLayout: FunctionComponent<MainLayoutProps> = ({ children }) => {
 
                         {user ? (
                             <Title level={3}>{`Твой лучший результат: ${
-                                userScoreInfo?.count || 0
+                                userScoreInfo?.count || "-"
                             } `}</Title>
                         ) : null}
 
