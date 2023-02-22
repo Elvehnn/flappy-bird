@@ -42,7 +42,10 @@ export const leaderboardSlice = createSlice({
             })
             .addCase(extraActions.get.fulfilled, (state, action) => {
                 state.fetching = false;
-                state.data = action.payload.data;
+
+                state.data = action.payload.data.sort(
+                    (a: LadderScore, b: LadderScore) => b.count - a.count
+                );
             })
             .addCase(extraActions.get.rejected, state => {
                 state.fetching = false;

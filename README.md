@@ -2,7 +2,7 @@
 # FlappyBird
 <img src="https://user-images.githubusercontent.com/70837634/220103879-04805743-45f0-4e50-959e-9da15aba4b4b.png" alt="demo" style="width: 600px;"/>  
 
-Демо: [будет]()
+Демо: [Ссылка](https://pachka-i-tochka.ya-praktikum.tech/sign-in)
 
 ## Стек использумых технологий и Web API:
 - `React`, `Redux Toolkit`
@@ -75,14 +75,15 @@ yarn lerna add {your_dep} --dev --scope server
 
 Перед первым запуском выполните `node init.js`
 
-`docker compose up` - запустит три сервиса
+`docker-compose up` - запустит два сервиса
 
-1. nginx, раздающий клиентскую статику (client)
-2. node, ваш сервер (server)
-3. postgres, вашу базу данных (postgres)
+1. раздача фронтовой статики, по умолчанию localhost:3000 (server)
+2. postgres, вашу базу данных (postgres)
+
+P.S. в папке client в .env файле указать url, на котором будет клиент (для корректных ajax запросов)
 
 Если вам понадобится только один сервис, просто уточните какой в команде
-`docker compose up {sevice_name}`, например `docker compose up server`
+`docker-compose up {sevice_name}`, например `docker-compose up server`
 
 ## Хуки
 

@@ -46,7 +46,6 @@ let pipeXThird = constants.CANVAS_WIDTH - (constants.CANVAS_WIDTH / 3) * 2;
 
 // score
 let score = 0;
-let bestScore: number = parseInt(getStorageValue("bestScore", "0"));
 
 const checkCollision = (circle: Circle, rect: Rectangle) => {
     if (
@@ -350,11 +349,6 @@ const Game = () => {
                 const interval = setInterval(() => {
                     // dying
                     if (touchedPipe() || fallOut()) {
-                        if (score > bestScore) {
-                            bestScore = score;
-                            localStorage.setItem("bestScore", score.toString());
-                        }
-
                         if (touchedPipe()) {
                             soundElements.hit.play();
                         }
@@ -470,10 +464,7 @@ const Game = () => {
                 cancelButtonProps={{ style: { display: "none" } }}
                 closable={false}
                 style={{ top: "40vh" }}>
-                <>
-                    <div>Ваш результат: {score}</div>
-                    <div>Лучший результат: {bestScore}</div>
-                </>
+                <div>Ваш результат: {score}</div>
             </Modal>
         </>
     );
