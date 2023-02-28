@@ -1,20 +1,19 @@
-Выпускной командный проект курса [Мидл фронтенд-разработчик](https://practicum.yandex.ru/middle-frontend/)
+# Выпускной командный проект курса [Мидл фронтенд-разработчик](https://practicum.yandex.ru/middle-frontend/)
+
 # FlappyBird
 <img src="https://user-images.githubusercontent.com/70837634/220103879-04805743-45f0-4e50-959e-9da15aba4b4b.png" alt="demo" style="width: 600px;"/>  
 
-Демо: [Ссылка](https://pachka-i-tochka.ya-praktikum.tech/sign-in)
+Демо: [Ссылка](https://pachka-i-tochka.ya-praktikum.tech)
 
 ## Стек использумых технологий и Web API:
 - `React`, `Redux Toolkit`
-- `Ant Design`
-- `Sass`
+- `Ant Design`, `Sass`
 - `Express`
 - `Docker`, `Docker-Compose` 
 - `PostgreSQL` 
 - `nginx`
 - `Canvas`
-- `ServiceWorker`
-- `Web Audio`
+- `ServiceWorker`, `Web Audio`
 
 ## Установка и запуск проекта
 
@@ -90,7 +89,12 @@ P.S. в папке client в .env файле указать url, на котор
 В проекте используется [lefthook](https://github.com/evilmartians/lefthook)
 Если очень-очень нужно пропустить проверки, используйте `--no-verify` (но не злоупотребляйте :)
 
-## Команда
-| <img src="https://avatars.githubusercontent.com/u/86188505" alt="Dmitry avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/42086901" alt="Artem avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/46155717" alt="Alexandr avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/70837634" alt="Elena avatar" style="height: 80px; width: 80px;"/> | <img src="https://avatars.githubusercontent.com/u/88541391" alt="Andrey avatar" style="height: 80px; width: 80px;"/> |
-|-------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| [Дмитрий](https://github.com/dubletab)                                                                                                         | [Артем](https://github.com/off-art)                                                                                                       | [Александр](https://github.com/alexmkk)                                                                                                             | [Елена](https://github.com/Elvehnn)                                                                                                                  | [Андрей](https://github.com/Spolete)                                                                                                             |                                                      
+## Мой вклад в проект:
+- `разработка дизайн-концепции, ввод основных элементов и настройка темы Ant Design`
+- `верстка стартовой страницы, авторизации, сведения о команде`
+- `реализация авторизации с валидацией`
+- `добавление возможности oAuth с помощью YandexID`
+- `добавление и настройка хранилища Redux`
+- `настройка SSR`
+- `добавление возможности переключать темы (фронт и бэк)` 
+- `добавление в проект ServiceWorker (в процессе), Web Audio`                                  
